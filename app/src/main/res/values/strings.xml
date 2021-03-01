@@ -3,4 +3,10 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="activity_earthquake_label_longitude">Longitude:</string>
+    <string name="activity_earthquake_label_latitude">Latitude:</string>
+    <string name="activity_earthquake_label_depth">Depth:</string>
+    <string name="activity_main_ack">Contains British Geological Survey materials ©NERC 2019</string>
+    <string name="activity_earthquake_link_button">Link</string>
+    <string name="activity_earthquake_magnitude">Magnitude</string>
 </resources>
