@@ -12,12 +12,12 @@ public class Location implements Serializable {
 
     private final String name;
     private final String county;
-    private final LatLng latLng;
+    private final LatLngExt latLng;
 
     public Location(String name, String county, LatLng latLng) {
         this.name = name;
         this.county = county;
-        this.latLng = latLng;
+        this.latLng = new LatLngExt(latLng);
     }
 
     public String getName() {
@@ -29,7 +29,7 @@ public class Location implements Serializable {
     }
 
     public LatLng getLatLng() {
-        return latLng;
+        return latLng.asLatLng();
     }
 
     public String getLocationString() {

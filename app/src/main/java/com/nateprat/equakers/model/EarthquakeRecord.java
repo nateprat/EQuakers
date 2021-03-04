@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
 
-public class EarthquakeRecord implements Serializable {
+public class EarthquakeRecord implements Serializable, Comparable<EarthquakeRecord> {
 
     private final String category;
     private final URL url;
@@ -57,5 +57,10 @@ public class EarthquakeRecord implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(category, url, earthquake);
+    }
+
+    @Override
+    public int compareTo(EarthquakeRecord o) {
+        return getEarthquake().compareTo(o.getEarthquake());
     }
 }

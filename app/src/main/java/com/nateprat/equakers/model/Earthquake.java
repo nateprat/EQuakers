@@ -2,11 +2,12 @@ package com.nateprat.equakers.model;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Earthquake implements Serializable {
+public class Earthquake implements Serializable, Comparable<Earthquake> {
 
     private final Date date;
     private final Location location;
@@ -46,6 +47,14 @@ public class Earthquake implements Serializable {
         return location;
     }
 
+    public static String getDepthUnit() {
+        return depthUnit;
+    }
+
+    public static String getMagnitudeUnit() {
+        return magnitudeUnit;
+    }
+
     @Override
     public String toString() {
         return "Earthquake{" +
@@ -70,5 +79,10 @@ public class Earthquake implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(date, location, depth, magnitude);
+    }
+
+    @Override
+    public int compareTo(Earthquake o) {
+        return this.getDate().compareTo(o.getDate());
     }
 }

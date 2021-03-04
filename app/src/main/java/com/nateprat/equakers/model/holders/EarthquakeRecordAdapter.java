@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.nateprat.equakers.R;
-import com.nateprat.equakers.activity.EarthquakeRecordActivity;
+import com.nateprat.equakers.activity.EarthquakeRecordScrollingActivity;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.utils.TagUtils;
 
@@ -45,7 +45,7 @@ public class EarthquakeRecordAdapter extends ListAdapter<EarthquakeRecord, Earth
     public void onBindViewHolder(@NonNull EarthquakeRecordViewHolder holder, int position) {
         holder.bind(getItem(position));
         holder.itemView.setOnClickListener(v -> {
-            EarthquakeRecordActivity.startActivity(context,  getItem(position));
+            EarthquakeRecordScrollingActivity.startActivity(context,  getItem(position));
             Log.i(TagUtils.getTag(this), "Clicked on " + holder.getItemId());
         });
     }

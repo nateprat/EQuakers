@@ -5,13 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,15 +12,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import com.nateprat.equakers.R;
+import com.nateprat.equakers.model.Earthquake;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.ui.custom.MagnitudeCircle;
 import com.nateprat.equakers.utils.TagUtils;
 
 import java.util.Date;
 
-public class EarthquakeRecordActivity extends AppCompatActivity {
-
+public class EarthquakeRecordScrollingActivity extends AppCompatActivity {
 
     // keys
     private static final String KEY_LOCATION = "key_location";
@@ -49,38 +54,37 @@ public class EarthquakeRecordActivity extends AppCompatActivity {
     private TextView longLabel;
 
     // value views
-    private TextView locationValue;
     private TextView dateValue;
     private TextView depthValue;
-    private Button urlButton;
     private TextView latValue;
     private TextView longValue;
+    private FloatingActionButton urlButton;
     private SupportMapFragment mapFragment;
     private MagnitudeCircle magnitudeValue;
 
-    private CardView cardView;
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_earthquake_details);
+        setTitle(getIntent().getStringExtra(KEY_LOCATION));
+        setContentView(R.layout.activity_earthquake_record_scrolling);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        CollapsingToolbarLayout toolBarLayout = findViewById(R.id.toolbar_layout);
+        toolBarLayout.setTitle(getTitle());
+
+        urlButton = findViewById(R.id.fab);
         depthLabel = findViewById(R.id.depthLabel);
         latLabel = findViewById(R.id.latLabel);
         longLabel = findViewById(R.id.longLabel);
-        locationValue = findViewById(R.id.locationValue);
         dateValue = findViewById(R.id.dateValue);
         depthValue = findViewById(R.id.depthValue);
         latValue = findViewById(R.id.latValue);
         longValue = findViewById(R.id.longValue);
-        urlButton = findViewById(R.id.urlButton);
-        urlButton.setOnClickListener(v -> {
+        this.urlButton.setOnClickListener(v -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getIntent().getStringExtra(KEY_URL)));
             startActivity(browserIntent);
         });
         magnitudeValue = new MagnitudeCircle(findViewById(R.id.magnitudeValue));
-
-        cardView = findViewById(R.id.locationCardView);
-
 
 
         setText();
@@ -138,7 +142,7 @@ public class EarthquakeRecordActivity extends AppCompatActivity {
 
 
             Marker placeMarker = googleMap.addMarker(new MarkerOptions().position(placeLocation)
-                    .title(locationValue.getText().toString()));
+                    .title(getTitle().toString()));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(placeLocation, MAP_ZOOM_LEVEL), MAP_ANIMATION_LENGTH_MS, null);
         });
 
@@ -146,16 +150,15 @@ public class EarthquakeRecordActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void setText() {
-        locationValue.setText(getIntent().getStringExtra(KEY_LOCATION));
         magnitudeValue.setMagnitude(getIntent().getDoubleExtra(KEY_MAGNITUDE, 0));
-        depthValue.setText(Double.toString(getIntent().getDoubleExtra(KEY_DEPTH, 0)));
+        depthValue.setText(getIntent().getDoubleExtra(KEY_DEPTH, 0) + " " + Earthquake.getDepthUnit());
         dateValue.setText(((Date)getIntent().getSerializableExtra(KEY_DATE)).toString());
         longValue.setText(Double.toString(getIntent().getDoubleExtra(KEY_LONG, 0)));
         latValue.setText(Double.toString(getIntent().getDoubleExtra(KEY_LAT, 0)));
     }
 
     public static void startActivity(Context context, EarthquakeRecord earthquakeRecord) {
-        Intent intent = new Intent(context, EarthquakeRecordActivity.class);
+        Intent intent = new Intent(context, EarthquakeRecordScrollingActivity.class);
         intent.putExtra(KEY_LOCATION, earthquakeRecord.getEarthquake().getLocation().getLocationString());
         intent.putExtra(KEY_MAGNITUDE, earthquakeRecord.getEarthquake().getMagnitude());
         intent.putExtra(KEY_DEPTH, earthquakeRecord.getEarthquake().getDepth());
@@ -165,8 +168,5 @@ public class EarthquakeRecordActivity extends AppCompatActivity {
         intent.putExtra(KEY_LAT, earthquakeRecord.getEarthquake().getLocation().getLatLng().latitude);
         context.startActivity(intent);
     }
-
-
-
 
 }
