@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +20,7 @@ import com.nateprat.equakers.core.concurrency.ThreadPools;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.model.Location;
 import com.nateprat.equakers.model.holders.EarthquakeRecordAdapter;
+import com.nateprat.equakers.utils.TagUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,8 +52,7 @@ public class EarthquakeMapDisplayActivity extends FragmentActivity implements On
         earthquakeList = findViewById(R.id.earthquakeList);
         setContentView(R.layout.activity_earthquake_map_display);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(this);
         earthquakeListAdapter = new EarthquakeRecordAdapter(this);
         earthquakeListAdapter.submitList(earthquakeRecords);
@@ -68,31 +70,29 @@ public class EarthquakeMapDisplayActivity extends FragmentActivity implements On
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Future<List<MarkerOptions>> future = ThreadPools.getInstance().submitTask(() -> {
-            List<MarkerOptions> tmp = new CopyOnWriteArrayList<>();
-            for (EarthquakeRecord earthquakeRecord : earthquakeRecords) {
-                Location location = earthquakeRecord.getEarthquake().getLocation();
-                String title = location.getLocationString();
-                LatLng latLng = location.getLatLng();
-                tmp.add(new MarkerOptions().position(latLng).title(title));
-            }
-            return tmp;
-        });
-
+        Future<List<MarkerOptions>> future = ThreadPools.getInstance().submitTask(this::getMarkerOptionsForRecords);
         List<MarkerOptions> markerOptions = new CopyOnWriteArrayList<>();
         try {
             markerOptions.addAll(future.get(timeout, timeoutUnit));
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
             e.printStackTrace();
+            Log.e(TagUtils.getTag(this), e.getMessage());
         }
 
         for (MarkerOptions markerOption : markerOptions) {
             mMap.addMarker(markerOption);
         }
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private List<MarkerOptions> getMarkerOptionsForRecords() {
+        List<MarkerOptions> tmp = new CopyOnWriteArrayList<>();
+        for (EarthquakeRecord earthquakeRecord : earthquakeRecords) {
+            Location location = earthquakeRecord.getEarthquake().getLocation();
+            String title = location.getLocationString();
+            LatLng latLng = location.getLatLng();
+            tmp.add(new MarkerOptions().position(latLng).title(title));
+        }
+        return tmp;
     }
 
     public static void startActivity(Context context, ArrayList<EarthquakeRecord> earthquakeRecords) {
