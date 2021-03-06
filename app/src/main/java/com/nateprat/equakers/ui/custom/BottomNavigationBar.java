@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nateprat.equakers.R;
+import com.nateprat.equakers.core.task.BottomNavBarListTask;
+import com.nateprat.equakers.core.task.BottomNavBarMapTask;
 import com.nateprat.equakers.core.task.Task;
 import com.nateprat.equakers.utils.TagUtils;
 
@@ -22,8 +24,10 @@ public class BottomNavigationBar {
 
     private Map<Integer, Task> itemTasks;
     private BottomNavigationView bottomNavigationView;
+    private final Context context;
 
-    public BottomNavigationBar(@NonNull BottomNavigationView bottomNavigationView) {
+    public BottomNavigationBar(@NonNull BottomNavigationView bottomNavigationView, Context context) {
+        this.context = context;
         this.itemTasks = new ConcurrentHashMap<>();
         this.bottomNavigationView = bottomNavigationView;
         this.bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -36,6 +40,8 @@ public class BottomNavigationBar {
                 return false;
             }
         });
+        this.addItemRunnable(R.id.bottom_navigation_list, new BottomNavBarListTask(context));
+        this.addItemRunnable(R.id.bottom_navigation_map, new BottomNavBarMapTask(context));
     }
 
     public Task getTaskForItemId(Integer itemId) {

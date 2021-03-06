@@ -1,16 +1,12 @@
 package com.nateprat.equakers.core.task;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.nateprat.equakers.activity.EarthquakeMapDisplayActivity;
-import com.nateprat.equakers.activity.MainActivity;
-import com.nateprat.equakers.model.Earthquake;
 import com.nateprat.equakers.model.EarthquakeRecord;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BottomNavBarMapTask extends Task {
 

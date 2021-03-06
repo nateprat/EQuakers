@@ -20,9 +20,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nateprat.equakers.R;
 import com.nateprat.equakers.core.concurrency.ThreadPools;
+import com.nateprat.equakers.core.task.BottomNavBarMapTask;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.model.Location;
 import com.nateprat.equakers.model.holders.EarthquakeRecordAdapter;
+import com.nateprat.equakers.ui.custom.BottomNavigationBar;
 import com.nateprat.equakers.utils.TagUtils;
 
 import java.io.Serializable;
@@ -36,12 +38,15 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class EarthquakeMapDisplayActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class EarthquakeMapDisplayActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, Activity {
 
     private static final String KEY_RECORDS = "key_records";
 
     private static final long timeout = 15L;
     private static final TimeUnit timeoutUnit = TimeUnit.SECONDS;
+
+    //UI
+    private BottomNavigationBar bottomNavigationBar;
 
     private RecyclerView earthquakeList;
     private EarthquakeRecordAdapter earthquakeListAdapter;
@@ -63,6 +68,7 @@ public class EarthquakeMapDisplayActivity extends FragmentActivity implements On
         Objects.requireNonNull(mapFragment).getMapAsync(this);
         earthquakeListAdapter = new EarthquakeRecordAdapter(this);
         earthquakeListAdapter.submitList(earthquakeRecords);
+        initialiseUI();
     }
 
     /**
@@ -117,4 +123,23 @@ public class EarthquakeMapDisplayActivity extends FragmentActivity implements On
 //        marker.get
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (bottomNavigationBar.getBottomNavigationView().getSelectedItemId() == R.id.bottom_navigation_list) {
+            super.onBackPressed();
+        } else {
+            bottomNavigationBar.getBottomNavigationView().setSelectedItemId(R.id.bottom_navigation_list);
+        }
+    }
+
+    @Override
+    public void initialiseUI() {
+        initialiseBottomNavigationBar();
+    }
+
+    private void initialiseBottomNavigationBar() {
+        bottomNavigationBar = new BottomNavigationBar(findViewById(R.id.earthquakeMapBottomNavigation), this);
+    }
+
 }

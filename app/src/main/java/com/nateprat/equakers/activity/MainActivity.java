@@ -12,7 +12,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nateprat.equakers.R;
 import com.nateprat.equakers.api.BritishGeologicalSurveyEarthquakeAPI;
 import com.nateprat.equakers.core.listeners.CustomSwipeRefreshListener;
-import com.nateprat.equakers.core.task.BottomNavBarListTask;
 import com.nateprat.equakers.core.task.BottomNavBarMapTask;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.model.comparators.EarthquakeDefaultComparator;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class MainActivity extends AppCompatActivity implements Activity {
 
@@ -110,12 +108,9 @@ public class MainActivity extends AppCompatActivity implements Activity {
     }
 
     private void initialiseBottomNavigationBar() {
-        bottomNavigationBar = new BottomNavigationBar(findViewById(R.id.bottom_navigation));
-        bottomNavigationBar.addItemRunnable(R.id.bottom_navigation_list, new BottomNavBarListTask(this));
-        BottomNavBarMapTask mapTask = new BottomNavBarMapTask(this);
+        bottomNavigationBar = new BottomNavigationBar(findViewById(R.id.bottom_navigation), this);
+        BottomNavBarMapTask mapTask = (BottomNavBarMapTask) bottomNavigationBar.getTaskForItemId(R.id.bottom_navigation_map);
         mapTask.updateRecords(earthquakeRecords);
-        bottomNavigationBar.addItemRunnable(R.id.bottom_navigation_map, mapTask);
-//        bottomNavigationBar.getBottomNavigationView().setSelectedItemId(R.id.bottom_navigation_list);
     }
 
     private void initialiseEarthquakeSwipeLayout() {
@@ -148,6 +143,15 @@ public class MainActivity extends AppCompatActivity implements Activity {
         };
         swipeRefreshLayout.setOnRefreshListener(listener);
         listener.onRefresh();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bottomNavigationBar.getBottomNavigationView().getSelectedItemId() == R.id.bottom_navigation_list) {
+            super.onBackPressed();
+        } else {
+            bottomNavigationBar.getBottomNavigationView().setSelectedItemId(R.id.bottom_navigation_list);
+        }
     }
 
 }
