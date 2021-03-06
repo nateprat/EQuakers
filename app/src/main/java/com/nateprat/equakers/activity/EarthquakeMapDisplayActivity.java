@@ -9,11 +9,14 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nateprat.equakers.R;
 import com.nateprat.equakers.core.concurrency.ThreadPools;
@@ -33,7 +36,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class EarthquakeMapDisplayActivity extends FragmentActivity implements OnMapReadyCallback {
+public class EarthquakeMapDisplayActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String KEY_RECORDS = "key_records";
 
@@ -44,6 +47,10 @@ public class EarthquakeMapDisplayActivity extends FragmentActivity implements On
     private EarthquakeRecordAdapter earthquakeListAdapter;
     private List<EarthquakeRecord> earthquakeRecords;
     private GoogleMap mMap;
+
+    // UK DEFAULTS
+    private static final LatLng DEFAULT_MAP_LAT_LNG = new LatLng(54.418929, -4.196777);
+    private static final float DEFAULT_MAP_ZOOM = 5F;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +89,9 @@ public class EarthquakeMapDisplayActivity extends FragmentActivity implements On
         for (MarkerOptions markerOption : markerOptions) {
             mMap.addMarker(markerOption);
         }
+
+        // Move to default position (Over UK)
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder().target(DEFAULT_MAP_LAT_LNG).zoom(DEFAULT_MAP_ZOOM).build()));
     }
 
     private List<MarkerOptions> getMarkerOptionsForRecords() {
@@ -90,7 +100,7 @@ public class EarthquakeMapDisplayActivity extends FragmentActivity implements On
             Location location = earthquakeRecord.getEarthquake().getLocation();
             String title = location.getLocationString();
             LatLng latLng = location.getLatLng();
-            tmp.add(new MarkerOptions().position(latLng).title(title));
+            tmp.add(new MarkerOptions().position(latLng).title(title).draggable(false));
         }
         return tmp;
     }
@@ -102,4 +112,9 @@ public class EarthquakeMapDisplayActivity extends FragmentActivity implements On
     }
 
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+//        marker.get
+        return true;
+    }
 }

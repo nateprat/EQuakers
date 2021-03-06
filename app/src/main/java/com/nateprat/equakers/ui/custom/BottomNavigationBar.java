@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.nateprat.equakers.R;
 import com.nateprat.equakers.core.task.Task;
 import com.nateprat.equakers.utils.TagUtils;
 
@@ -35,6 +36,10 @@ public class BottomNavigationBar {
                 return false;
             }
         });
+    }
+
+    public BottomNavigationView getBottomNavigationView() {
+        return bottomNavigationView;
     }
 
     public void addItemRunnable(Integer key, Task task) {

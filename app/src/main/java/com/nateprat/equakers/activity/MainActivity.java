@@ -3,41 +3,28 @@ package com.nateprat.equakers.activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.DragEvent;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nateprat.equakers.R;
 import com.nateprat.equakers.api.BritishGeologicalSurveyEarthquakeAPI;
-import com.nateprat.equakers.core.concurrency.ThreadPools;
 import com.nateprat.equakers.core.listeners.CustomSwipeRefreshListener;
 import com.nateprat.equakers.core.task.BottomNavBarListTask;
 import com.nateprat.equakers.core.task.BottomNavBarMapTask;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.model.comparators.EarthquakeDefaultComparator;
 import com.nateprat.equakers.model.holders.EarthquakeRecordAdapter;
-import com.nateprat.equakers.service.RssBGSEarthquakeCallable;
 import com.nateprat.equakers.ui.custom.BottomNavigationBar;
 import com.nateprat.equakers.utils.BuildUtils;
 import com.nateprat.equakers.utils.TagUtils;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView earthquakeList;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EarthquakeRecordAdapter earthquakeListAdapter;
-    private BottomNavigationBar bottomNavigationView;
+    private BottomNavigationBar bottomNavigationBar;
     private List<EarthquakeRecord> earthquakeRecords = new ArrayList<>();
     private BritishGeologicalSurveyEarthquakeAPI api = new BritishGeologicalSurveyEarthquakeAPI();
 
@@ -88,16 +75,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.e("MyTag","in onCreate");
         // Set up the raw links to the graphical components
-        earthquakeList = (RecyclerView) findViewById(R.id.earthquakeList2);
+        earthquakeList = findViewById(R.id.earthquakeList2);
         swipeRefreshLayout = findViewById(R.id.swipe_layout);
         earthquakeList.setLayoutManager(new LinearLayoutManager(this));
         earthquakeListAdapter = new EarthquakeRecordAdapter(this);
         earthquakeList.setAdapter(earthquakeListAdapter);
-        bottomNavigationView = new BottomNavigationBar(findViewById(R.id.bottom_navigation));
-        bottomNavigationView.addItemRunnable(R.id.page_1, new BottomNavBarListTask(this));
+        bottomNavigationBar = new BottomNavigationBar(findViewById(R.id.bottom_navigation));
+        bottomNavigationBar.addItemRunnable(R.id.bottom_navigation_list, new BottomNavBarListTask(this));
         BottomNavBarMapTask mapTask = new BottomNavBarMapTask(this);
         mapTask.updateRecords(earthquakeRecords);
-        bottomNavigationView.addItemRunnable(R.id.page_2, mapTask);
+        bottomNavigationBar.addItemRunnable(R.id.bottom_navigation_map, mapTask);
 
         swipeRefreshLayout.setOnRefreshListener(new CustomSwipeRefreshListener(swipeRefreshLayout) {
             @Override
@@ -124,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 // Nada
             }
         });
-        swipeRefreshLayout.refreshDrawableState();
+        bottomNavigationBar.getBottomNavigationView().setSelectedItemId(R.id.bottom_navigation_list);
         Log.e("MyTag","after startButton");
         // More Code goes here
     }

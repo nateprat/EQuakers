@@ -1,12 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/page_1"
+        android:id="@+id/bottom_navigation_list"
         android:enabled="true"
 
-        android:title="item1"/>
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/bottom_navigation_list" />
     <item
-        android:id="@+id/page_2"
+        android:id="@+id/bottom_navigation_map"
         android:enabled="true"
 
-        android:title="item2"/>
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/bottom_navigation_map" />
 </menu>

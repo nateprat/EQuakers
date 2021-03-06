@@ -80,15 +80,21 @@ public class EarthquakeRecordScrollingActivity extends AppCompatActivity {
         depthValue = findViewById(R.id.depthValue);
         latValue = findViewById(R.id.latValue);
         longValue = findViewById(R.id.longValue);
-        this.urlButton.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getIntent().getStringExtra(KEY_URL)));
-            startActivity(browserIntent);
-        });
-        magnitudeValue = new MagnitudeCircle(findViewById(R.id.magnitudeValue));
+        this.urlButton.setOnClickListener(urlButtonOnClick());
+        magnitudeValue = new MagnitudeCircle(getApplicationContext(), findViewById(R.id.magnitudeValue));
 
 
         setText();
         setMapLocation();
+    }
+
+    private View.OnClickListener urlButtonOnClick() {
+        return v -> {
+            String url = getIntent().getStringExtra(KEY_URL);
+            Log.i(TagUtils.getTag(this), "urlButton - OnClick - Loading url=" + url);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        };
     }
 
     @Override
