@@ -23,8 +23,13 @@ public class RssBGSEarthquakeCallable implements Callable<List<EarthquakeRecord>
 
     private final RssParser<EarthquakeRecord> rssParser;
 
-    public RssBGSEarthquakeCallable() throws MalformedURLException {
-        URL url = new URL(APIUrl.britishGeologicalSurveyEarthquakeRssFeed);
+    public RssBGSEarthquakeCallable() {
+        URL url = null;
+        try {
+            url = new URL(APIUrl.britishGeologicalSurveyEarthquakeRssFeed);
+        } catch (MalformedURLException e) {
+            Log.e(TagUtils.getTag(this), "URL parsing error, unable to make connection to apiUrl: " + APIUrl.britishGeologicalSurveyEarthquakeRssFeed);
+        }
         this.rssParser = new RssParserImpl<>(url, mapper);
     }
 

@@ -38,19 +38,23 @@ public class BottomNavigationBar {
         });
     }
 
+    public Task getTaskForItemId(Integer itemId) {
+        return itemTasks.get(itemId);
+    }
+
     public BottomNavigationView getBottomNavigationView() {
         return bottomNavigationView;
     }
 
-    public void addItemRunnable(Integer key, Task task) {
-        addItemRunnable(key, task, false);
+    public void addItemRunnable(Integer itemId, Task task) {
+        addItemRunnable(itemId, task, false);
     }
 
-    public void addItemRunnable(Integer key, Task task, boolean replace) {
-        if (!itemTasks.containsKey(key) || replace) {
-            itemTasks.put(key, task);
+    public void addItemRunnable(Integer itemId, Task task, boolean replace) {
+        if (!itemTasks.containsKey(itemId) || replace) {
+            itemTasks.put(itemId, task);
         } else {
-            Log.e(TagUtils.getTag(this), "Error adding task, task already exists: " + key);
+            Log.e(TagUtils.getTag(this), "Error adding task, task already exists for itemId: " + itemId);
         }
     }
 

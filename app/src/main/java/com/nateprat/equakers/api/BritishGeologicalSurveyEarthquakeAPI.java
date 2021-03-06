@@ -1,31 +1,28 @@
 package com.nateprat.equakers.api;
 
-import android.util.Log;
-
-import com.nateprat.equakers.core.concurrency.ThreadPools;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.service.RssBGSEarthquakeCallable;
-import com.nateprat.equakers.utils.TagUtils;
 
-import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.Callable;
 
-public class BritishGeologicalSurveyEarthquakeAPI extends API<List<EarthquakeRecord>> {
+public final class BritishGeologicalSurveyEarthquakeAPI extends API<List<EarthquakeRecord>> {
 
-    @Override
-    public List<EarthquakeRecord> call(Object... args) {
-        Log.i(TagUtils.getTag(this), "Calling " + APIUrl.britishGeologicalSurveyEarthquakeRssFeed);
-        try {
-            return ThreadPools.getInstance().submitTask(new RssBGSEarthquakeCallable(), 15L, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException | MalformedURLException e) {
-            Log.e(BritishGeologicalSurveyEarthquakeAPI.class.getSimpleName(), e.getMessage());
-            return Collections.emptyList();
-        }
+    private static volatile BritishGeologicalSurveyEarthquakeAPI instance;
+    private static final Object singletonLock = new Object();
+
+    private BritishGeologicalSurveyEarthquakeAPI(Callable<List<EarthquakeRecord>> callable) {
+        super(callable, Collections.emptyList());
     }
 
+    public static BritishGeologicalSurveyEarthquakeAPI getInstance() {
+        synchronized (singletonLock) {
+            if (instance == null) {
+                instance = new BritishGeologicalSurveyEarthquakeAPI(new RssBGSEarthquakeCallable());
+            }
+            return instance;
+        }
+    }
 
 }

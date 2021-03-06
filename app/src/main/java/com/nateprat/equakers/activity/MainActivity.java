@@ -27,16 +27,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Activity {
 
     private RecyclerView earthquakeList;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EarthquakeRecordAdapter earthquakeListAdapter;
     private BottomNavigationBar bottomNavigationBar;
     private List<EarthquakeRecord> earthquakeRecords = new ArrayList<>();
-    private BritishGeologicalSurveyEarthquakeAPI api = new BritishGeologicalSurveyEarthquakeAPI();
-
-    private final ReentrantLock updateLock = new ReentrantLock();
 
     @Override
     protected void onPostResume() {
@@ -46,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        submitRecords(getLatestRecords());
     }
 
     @Override
@@ -73,28 +69,67 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.e("MyTag","in onCreate");
-        // Set up the raw links to the graphical components
-        earthquakeList = findViewById(R.id.earthquakeList2);
-        swipeRefreshLayout = findViewById(R.id.swipe_layout);
+        initialiseUI();
+        earthquakeRecords = BritishGeologicalSurveyEarthquakeAPI.getInstance().call();
+    }
+
+    private void sortList(Comparator<EarthquakeRecord>... comparators) {
+        if (BuildUtils.supportsAPI(Build.VERSION_CODES.N)) {
+            Comparator<EarthquakeRecord> combinedComparator = Arrays.stream(comparators)
+                    .reduce(Comparator::thenComparing)
+                    .orElse(new EarthquakeDefaultComparator());
+            earthquakeRecords.sort(combinedComparator);
+        } else {
+
+        }
+    }
+
+    private List<EarthquakeRecord> retrieveLatestRecords() {
+        return BritishGeologicalSurveyEarthquakeAPI.getInstance().call();
+    }
+
+    private void submitRecords(List<EarthquakeRecord> records) {
+        earthquakeListAdapter.submitList(records);
+    }
+
+    // Initialisation
+
+    @Override
+    public void initialiseUI() {
+        initialiseBottomNavigationBar();
+        initialiseEarthquakeList();
+        initialiseEarthquakeSwipeLayout();
+    }
+
+    private void initialiseEarthquakeList() {
+        earthquakeList = findViewById(R.id.mainActivityEarthquakeList);
         earthquakeList.setLayoutManager(new LinearLayoutManager(this));
         earthquakeListAdapter = new EarthquakeRecordAdapter(this);
         earthquakeList.setAdapter(earthquakeListAdapter);
+
+    }
+
+    private void initialiseBottomNavigationBar() {
         bottomNavigationBar = new BottomNavigationBar(findViewById(R.id.bottom_navigation));
         bottomNavigationBar.addItemRunnable(R.id.bottom_navigation_list, new BottomNavBarListTask(this));
         BottomNavBarMapTask mapTask = new BottomNavBarMapTask(this);
         mapTask.updateRecords(earthquakeRecords);
         bottomNavigationBar.addItemRunnable(R.id.bottom_navigation_map, mapTask);
+//        bottomNavigationBar.getBottomNavigationView().setSelectedItemId(R.id.bottom_navigation_list);
+    }
 
-        swipeRefreshLayout.setOnRefreshListener(new CustomSwipeRefreshListener(swipeRefreshLayout) {
+    private void initialiseEarthquakeSwipeLayout() {
+        swipeRefreshLayout = findViewById(R.id.swipe_layout);
+        SwipeRefreshLayout.OnRefreshListener listener = new CustomSwipeRefreshListener(swipeRefreshLayout) {
             @Override
             protected boolean run() {
-                List<EarthquakeRecord> newRecords = getLatestRecords();
+                List<EarthquakeRecord> newRecords = retrieveLatestRecords();
                 boolean isEqual = newRecords.equals(earthquakeRecords);
                 if (isEqual) {
                     Log.d(TagUtils.getTag(this), "Existing earthquakeRecords list is the same as previous, ignoring update.");
                 } else {
                     earthquakeRecords = newRecords;
+                    BottomNavBarMapTask mapTask = (BottomNavBarMapTask)bottomNavigationBar.getTaskForItemId(R.id.bottom_navigation_map);
                     mapTask.updateRecords(earthquakeRecords);
                 }
                 return !isEqual;
@@ -110,29 +145,9 @@ public class MainActivity extends AppCompatActivity {
             protected void onFailure() {
                 // Nada
             }
-        });
-        bottomNavigationBar.getBottomNavigationView().setSelectedItemId(R.id.bottom_navigation_list);
-        Log.e("MyTag","after startButton");
-        // More Code goes here
-    }
-
-    private void sortList(Comparator<EarthquakeRecord>... comparators) {
-        if (BuildUtils.supportsAPI(Build.VERSION_CODES.N)) {
-            Comparator<EarthquakeRecord> combinedComparator = Arrays.stream(comparators)
-                    .reduce(Comparator::thenComparing)
-                    .orElse(new EarthquakeDefaultComparator());
-            earthquakeRecords.sort(combinedComparator);
-        } else {
-
-        }
-    }
-
-    private List<EarthquakeRecord> getLatestRecords() {
-        return api.call();
-    }
-
-    private void submitRecords(List<EarthquakeRecord> records) {
-        earthquakeListAdapter.submitList(records);
+        };
+        swipeRefreshLayout.setOnRefreshListener(listener);
+        listener.onRefresh();
     }
 
 }

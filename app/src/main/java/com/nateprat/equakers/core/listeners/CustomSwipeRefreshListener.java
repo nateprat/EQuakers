@@ -2,6 +2,8 @@ package com.nateprat.equakers.core.listeners;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.nateprat.equakers.core.concurrency.ThreadPools;
+
 import java.net.MalformedURLException;
 
 public abstract class CustomSwipeRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
@@ -15,11 +17,13 @@ public abstract class CustomSwipeRefreshListener implements SwipeRefreshLayout.O
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
-        if (run()) {
-            onSuccess();
-        } else {
-            onFailure();
-        }
+        ThreadPools.getInstance().submitTask(() -> {
+            if (run()) {
+                onSuccess();
+            } else {
+                onFailure();
+            }
+        });
         swipeRefreshLayout.setRefreshing(false);
     }
 
