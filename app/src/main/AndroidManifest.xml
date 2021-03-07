@@ -6,11 +6,12 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the "MyLocation" functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+
 
     <application
         android:allowBackup="true"
@@ -20,10 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EQuakers"
         android:usesCleartextTraffic="true" >
-<!--        <activity-->
-<!--&lt;!&ndash;            android:name=".BottomNavigationActivity"&ndash;&gt;-->
-<!--            android:label="@string/title_activity_bottom_navigation" >-->
-<!--        </activity>-->
+
+        <!-- <activity -->
+        <!-- &lt;!&ndash;            android:name=".BottomNavigationActivity"&ndash;&gt; -->
+        <!-- android:label="@string/title_activity_bottom_navigation" > -->
+        <!-- </activity> -->
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,11 +36,11 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key"/>
+            android:value="@string/google_maps_api_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".activity.EarthquakeMapDisplayActivity"
-            android:label="@string/title_activity_earthquake_map_display" />
         <activity
             android:name=".activity.EarthquakeRecordScrollingActivity"
             android:label="@string/title_activity_earthquake_record_scrolling"
