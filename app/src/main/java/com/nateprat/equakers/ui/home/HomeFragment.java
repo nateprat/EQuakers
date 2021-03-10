@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.chip.Chip;
 import com.nateprat.equakers.R;
 import com.nateprat.equakers.api.BritishGeologicalSurveyEarthquakeAPI;
 import com.nateprat.equakers.core.listeners.CustomSwipeRefreshListener;
@@ -27,8 +28,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class HomeFragment extends Fragment {
 
     private Context context;
-    private HomeViewModel homeViewModel;
     private RecyclerView recyclerView;
+    private Chip sortChip;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EarthquakeRecordAdapter earthquakeListAdapter;
     private static final List<EarthquakeRecord> earthquakeRecords = new CopyOnWriteArrayList<>();
@@ -37,13 +38,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         context = container.getContext();
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         swipeRefreshLayout = root.findViewById(R.id.swipe_layout);
         recyclerView = root.findViewById(R.id.mainActivityEarthquakeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         earthquakeListAdapter = new EarthquakeRecordAdapter(context);
         recyclerView.setAdapter(earthquakeListAdapter);
+        sortChip = root.findViewById(R.id.sortChip);
 
 
 
@@ -53,6 +54,7 @@ public class HomeFragment extends Fragment {
 
     private void initUI() {
         initialiseEarthquakeSwipeLayout();
+        initialiseSortButton();
     }
 
     private List<EarthquakeRecord> retrieveRecords() {
@@ -90,6 +92,12 @@ public class HomeFragment extends Fragment {
         };
         swipeRefreshLayout.setOnRefreshListener(listener);
         listener.onRefresh();
+    }
+
+    private void initialiseSortButton() {
+        sortChip.setOnClickListener(item -> {
+
+        });
     }
 
     public static List<EarthquakeRecord> getEarthquakeRecords() {

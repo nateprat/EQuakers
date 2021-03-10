@@ -35,4 +35,6 @@
     <string name="title_activity_earthquake_map_display">Map</string>
     <string name="bottom_navigation_list">List</string>
     <string name="bottom_navigation_map">Map</string>
+    <string name="fragment_home_sort">Sort</string>
+    <string name="fragment_home_title">UK Earthquakes</string>
 </resources>
