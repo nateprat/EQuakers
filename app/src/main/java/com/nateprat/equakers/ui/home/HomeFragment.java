@@ -20,6 +20,7 @@ import com.nateprat.equakers.api.BritishGeologicalSurveyEarthquakeAPI;
 import com.nateprat.equakers.core.listeners.CustomSwipeRefreshListener;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.model.holders.EarthquakeRecordAdapter;
+import com.nateprat.equakers.ui.SortItemListDialogFragment;
 import com.nateprat.equakers.utils.TagUtils;
 
 import java.util.List;
@@ -96,7 +97,8 @@ public class HomeFragment extends Fragment {
 
     private void initialiseSortButton() {
         sortChip.setOnClickListener(item -> {
-
+            Log.i(TagUtils.getTag(this), "Opened sorting list for HomeFragment");
+            SortItemListDialogFragment.newInstance(2).showNow(getChildFragmentManager(), "sortList");
         });
     }
 
