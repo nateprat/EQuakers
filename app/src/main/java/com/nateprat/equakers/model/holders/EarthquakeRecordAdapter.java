@@ -23,12 +23,14 @@ public class EarthquakeRecordAdapter extends ListAdapter<EarthquakeRecord, Earth
         super(new DiffUtil.ItemCallback<EarthquakeRecord>() {
             @Override
             public boolean areItemsTheSame(@NonNull EarthquakeRecord oldItem, @NonNull EarthquakeRecord newItem) {
-                return oldItem == newItem;
+//                return oldItem == newItem;
+                return false;
             }
 
             @Override
             public boolean areContentsTheSame(@NonNull EarthquakeRecord oldItem, @NonNull EarthquakeRecord newItem) {
-                return oldItem.equals(newItem);
+//                return oldItem.equals(newItem);
+                return false;
             }
         });
         this.context = context;

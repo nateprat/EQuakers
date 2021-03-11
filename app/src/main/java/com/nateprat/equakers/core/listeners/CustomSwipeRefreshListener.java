@@ -15,7 +15,7 @@ public abstract class CustomSwipeRefreshListener implements SwipeRefreshLayout.O
     }
 
     @Override
-    public void onRefresh() {
+    public synchronized void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
         ThreadPools.getInstance().submitTask(() -> {
             if (run()) {

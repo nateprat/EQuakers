@@ -1,6 +1,7 @@
 package com.nateprat.equakers.ui.home;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -17,12 +17,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.chip.Chip;
 import com.nateprat.equakers.R;
 import com.nateprat.equakers.api.BritishGeologicalSurveyEarthquakeAPI;
+import com.nateprat.equakers.core.concurrency.ThreadPools;
 import com.nateprat.equakers.core.listeners.CustomSwipeRefreshListener;
 import com.nateprat.equakers.model.EarthquakeRecord;
 import com.nateprat.equakers.model.holders.EarthquakeRecordAdapter;
 import com.nateprat.equakers.ui.SortItemListDialogFragment;
+import com.nateprat.equakers.ui.custom.sorting.EarthquakeRecordsSorting;
 import com.nateprat.equakers.utils.TagUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -33,7 +36,7 @@ public class HomeFragment extends Fragment {
     private Chip sortChip;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EarthquakeRecordAdapter earthquakeListAdapter;
-    private static final List<EarthquakeRecord> earthquakeRecords = new CopyOnWriteArrayList<>();
+    private static volatile List<EarthquakeRecord> earthquakeRecords = new CopyOnWriteArrayList<>();
     private volatile boolean onFirstLoad = true;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,24 +69,20 @@ public class HomeFragment extends Fragment {
         SwipeRefreshLayout.OnRefreshListener listener = new CustomSwipeRefreshListener(swipeRefreshLayout) {
             @Override
             protected boolean run() {
-                earthquakeRecords.clear();
-                earthquakeRecords.addAll(retrieveRecords());
+                List<EarthquakeRecord> records = retrieveRecords();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    EarthquakeRecordsSorting.getWorkingComparator().ifPresent(records::sort);
+                }
+                earthquakeRecords = records;
                 return true;
-//                List<EarthquakeRecord> newRecords = retrieveRecords();
-//                boolean isEqual = earthquakeRecords.equals(newRecords);
-//                if (isEqual) {
-//                    Log.d(TagUtils.getTag(this), "Existing earthquakeRecords list is the same as previous, ignoring update.");
-//                } else {
-//                    earthquakeRecords.clear();
-//                    earthquakeRecords.addAll(newRecords);
-//                }
-//                return !isEqual;
             }
 
             @Override
             protected void onSuccess() {
                 Log.i(TagUtils.getTag(this), "Mapping earthquake list (size=" + earthquakeRecords.size() + ") to scroller view.");
-                getActivity().runOnUiThread(() -> earthquakeListAdapter.submitList(earthquakeRecords));
+                getActivity().runOnUiThread(() -> {
+                    earthquakeListAdapter.submitList(earthquakeRecords);
+                });
             }
 
             @Override
@@ -98,7 +97,7 @@ public class HomeFragment extends Fragment {
     private void initialiseSortButton() {
         sortChip.setOnClickListener(item -> {
             Log.i(TagUtils.getTag(this), "Opened sorting list for HomeFragment");
-            SortItemListDialogFragment.newInstance(2).showNow(getChildFragmentManager(), "sortList");
+            SortItemListDialogFragment.newInstance().showNow(getChildFragmentManager(), "sortList");
         });
     }
 

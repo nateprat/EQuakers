@@ -1,5 +1,6 @@
 package com.nateprat.equakers.ui;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -7,15 +8,24 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.nateprat.equakers.R;
+import com.nateprat.equakers.ui.custom.sorting.EarthquakeRecordSorter;
+import com.nateprat.equakers.ui.custom.sorting.EarthquakeRecordsSorting;
+
+import java.util.Map;
 
 /**
  * <p>A fragment that shows a list of items as a modal bottom sheet.</p>
@@ -27,14 +37,11 @@ import com.nateprat.equakers.R;
 public class SortItemListDialogFragment extends BottomSheetDialogFragment {
 
     // TODO: Customize parameter argument names
-    private static final String ARG_ITEM_COUNT = "item_count";
+    private static final String ARG_SORT_MAP = "sort_map";
 
     // TODO: Customize parameters
-    public static SortItemListDialogFragment newInstance(int itemCount) {
+    public static SortItemListDialogFragment newInstance() {
         final SortItemListDialogFragment fragment = new SortItemListDialogFragment();
-        final Bundle args = new Bundle();
-        args.putInt(ARG_ITEM_COUNT, itemCount);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -49,27 +56,28 @@ public class SortItemListDialogFragment extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new SortItemAdapter(getArguments().getInt(ARG_ITEM_COUNT)));
+        recyclerView.setAdapter(new SortItemAdapter());
     }
+
 
     private class ViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView text;
+        final ImageView image;
+        final TextView description;
+        final Switch sortSwitch;
+        final ImageButton reverseToggle;
 
         ViewHolder(LayoutInflater inflater, ViewGroup parent) {
             // TODO: Customize the item layout
             super(inflater.inflate(R.layout.fragment_item_list_dialog_list_dialog_item, parent, false));
-            text = itemView.findViewById(R.id.text);
+            description = itemView.findViewById(R.id.sortItemText);
+            sortSwitch = itemView.findViewById(R.id.sortSwitch);
+            image = itemView.findViewById(R.id.sortImage);
+            reverseToggle = itemView.findViewById(R.id.imageButton);
         }
     }
 
     private class SortItemAdapter extends RecyclerView.Adapter<ViewHolder> {
-
-        private final int mItemCount;
-
-        SortItemAdapter(int itemCount) {
-            mItemCount = itemCount;
-        }
 
         @NonNull
         @Override
@@ -79,12 +87,37 @@ public class SortItemListDialogFragment extends BottomSheetDialogFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.text.setText(String.valueOf(position));
+            int drawableId = getResources().getIdentifier(EarthquakeRecordsSorting.getSorterMap().get(position).getIconPath(), "drawable", getContext().getPackageName());
+            holder.image.setImageResource(drawableId);
+            holder.description.setText(EarthquakeRecordsSorting.getSorterMap().get(position).getKey());
+            holder.reverseToggle.setOnClickListener(item -> {
+                EarthquakeRecordsSorting.getSorterMap().get(position).switchOrder();
+                if (EarthquakeRecordsSorting.getSorterMap().get(position).isAscending()) {
+                    holder.reverseToggle.setImageDrawable(getResources().getDrawable(android.R.drawable.arrow_up_float));
+                } else {
+                    holder.reverseToggle.setImageDrawable(getResources().getDrawable(android.R.drawable.arrow_down_float));
+                }
+            });
+            if (EarthquakeRecordsSorting.getSorterMap().get(position).isAscending()) {
+                holder.reverseToggle.setImageDrawable(getResources().getDrawable(android.R.drawable.arrow_up_float));
+            } else {
+                holder.reverseToggle.setImageDrawable(getResources().getDrawable(android.R.drawable.arrow_down_float));
+            }
+
+            holder.sortSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                EarthquakeRecordsSorting.getSorterMap().get(position).setEnabled(isChecked);
+                if (isChecked) {
+                    holder.reverseToggle.setVisibility(View.VISIBLE);
+                } else {
+                    holder.reverseToggle.setVisibility(View.INVISIBLE);
+                }
+            });
+            holder.sortSwitch.setChecked(EarthquakeRecordsSorting.getSorterMap().get(position).isEnabled());
         }
 
         @Override
         public int getItemCount() {
-            return mItemCount;
+            return EarthquakeRecordsSorting.getSorterMap().size();
         }
 
     }

@@ -4,7 +4,7 @@ import com.nateprat.equakers.model.EarthquakeRecord;
 
 import java.util.Comparator;
 
-public class EarthquakeDefaultComparator implements Comparator<EarthquakeRecord> {
+public class EarthquakeDateComparator implements Comparator<EarthquakeRecord> {
 
     @Override
     public int compare(EarthquakeRecord o1, EarthquakeRecord o2) {

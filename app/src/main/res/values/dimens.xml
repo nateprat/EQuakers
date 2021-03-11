@@ -8,4 +8,5 @@
     <dimen name="magnitude_circle">72dp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
+    <dimen name="list_item_spacing_quarter">4dp</dimen>
 </resources>
