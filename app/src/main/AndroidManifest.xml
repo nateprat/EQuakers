@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.EQuakers"
+        android:theme="@style/Theme.UKQuakes"
         android:usesCleartextTraffic="true" >
 
         <!-- <activity -->
@@ -44,7 +44,7 @@
         <activity
             android:name="com.nateprat.university.mobileplatformdevelopment.activity.EarthquakeRecordScrollingActivity"
             android:label="@string/title_activity_earthquake_record_scrolling"
-            android:theme="@style/Theme.EQuakers.NoActionBar" />
+            android:theme="@style/Theme.UKQuakes.NoActionBar" />
         <activity
             android:name="com.nateprat.university.mobileplatformdevelopment.activity.MainActivity"
             android:label="@string/app_name" >
