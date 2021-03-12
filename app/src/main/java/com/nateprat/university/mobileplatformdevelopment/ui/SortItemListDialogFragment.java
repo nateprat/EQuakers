@@ -19,7 +19,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.nateprat.mobileplatformdevelopment.R;
+import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
 import com.nateprat.university.mobileplatformdevelopment.ui.custom.sorting.EarthquakeRecordsSorting;
+import com.nateprat.university.mobileplatformdevelopment.ui.home.HomeFragment;
 
 /**
  * <p>A fragment that shows a list of items as a modal bottom sheet.</p>
@@ -53,6 +55,11 @@ public class SortItemListDialogFragment extends BottomSheetDialogFragment {
         recyclerView.setAdapter(new SortItemAdapter());
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        HomeFragment.getSwipeListener().onRefresh();
+    }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
 

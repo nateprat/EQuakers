@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nateprat.mobileplatformdevelopment.R;
+import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 import com.nateprat.university.mobileplatformdevelopment.model.Location;
 import com.nateprat.university.mobileplatformdevelopment.ui.home.HomeFragment;
@@ -100,7 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void updateMarkerRecordMap() {
-        for (EarthquakeRecord earthquakeRecord : HomeFragment.getEarthquakeRecords()) {
+        for (EarthquakeRecord earthquakeRecord : BGSEarthquakeFeed.getInstance().getRecords()) {
             Location location = earthquakeRecord.getEarthquake().getLocation();
             String title = location.getLocationString();
             LatLng latLng = location.getLatLng();

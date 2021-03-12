@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,8 @@ import com.google.android.material.chip.Chip;
 import com.nateprat.mobileplatformdevelopment.R;
 import com.nateprat.university.mobileplatformdevelopment.api.BritishGeologicalSurveyEarthquakeAPI;
 import com.nateprat.university.mobileplatformdevelopment.core.listeners.CustomSwipeRefreshListener;
+import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
+import com.nateprat.university.mobileplatformdevelopment.core.publish.EarthquakeObserver;
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 import com.nateprat.university.mobileplatformdevelopment.model.holders.EarthquakeRecordAdapter;
 import com.nateprat.university.mobileplatformdevelopment.ui.SortItemListDialogFragment;
@@ -34,8 +37,8 @@ public class HomeFragment extends Fragment {
     private Chip sortChip;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EarthquakeRecordAdapter earthquakeListAdapter;
-    private static volatile List<EarthquakeRecord> earthquakeRecords = new CopyOnWriteArrayList<>();
-    private volatile boolean onFirstLoad = true;
+    private EarthquakeObserver earthquakeObserver = new EarthquakeObserver();
+    private static SwipeRefreshLayout.OnRefreshListener swipeListener;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,11 +50,15 @@ public class HomeFragment extends Fragment {
         earthquakeListAdapter = new EarthquakeRecordAdapter(context);
         recyclerView.setAdapter(earthquakeListAdapter);
         sortChip = root.findViewById(R.id.sortChip);
-
+        BGSEarthquakeFeed.getInstance().addObserver(earthquakeObserver);
 
 
         initUI();
         return root;
+    }
+
+    public static SwipeRefreshLayout.OnRefreshListener getSwipeListener() {
+        return swipeListener;
     }
 
     private void initUI() {
@@ -64,32 +71,31 @@ public class HomeFragment extends Fragment {
     }
 
     private void initialiseEarthquakeSwipeLayout() {
-        SwipeRefreshLayout.OnRefreshListener listener = new CustomSwipeRefreshListener(swipeRefreshLayout) {
+        swipeListener = new CustomSwipeRefreshListener(swipeRefreshLayout) {
             @Override
             protected boolean run() {
-                List<EarthquakeRecord> records = retrieveRecords();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    EarthquakeRecordsSorting.getWorkingComparator().ifPresent(records::sort);
-                }
-                earthquakeRecords = records;
+                earthquakeObserver.requestUpdate();
                 return true;
             }
 
             @Override
             protected void onSuccess() {
-                Log.i(TagUtils.getTag(this), "Mapping earthquake list (size=" + earthquakeRecords.size() + ") to scroller view.");
+                Log.i(TagUtils.getTag(this), "Mapping earthquake list (size=" + earthquakeObserver.getRecords().size() + ") to scroller view.");
                 getActivity().runOnUiThread(() -> {
-                    earthquakeListAdapter.submitList(earthquakeRecords);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        EarthquakeRecordsSorting.getWorkingComparator().ifPresent(earthquakeObserver.getRecords()::sort);
+                    }
+                    earthquakeListAdapter.submitList(earthquakeObserver.getRecords());
                 });
             }
 
             @Override
             protected void onFailure() {
-                // Nada
+                Toast.makeText(getContext(), "Failed to update earthquake list", Toast.LENGTH_SHORT);
             }
         };
-        swipeRefreshLayout.setOnRefreshListener(listener);
-        listener.onRefresh();
+        swipeRefreshLayout.setOnRefreshListener(swipeListener);
+        swipeListener.onRefresh();
     }
 
     private void initialiseSortButton() {
@@ -99,7 +105,4 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public static List<EarthquakeRecord> getEarthquakeRecords() {
-        return earthquakeRecords;
-    }
 }

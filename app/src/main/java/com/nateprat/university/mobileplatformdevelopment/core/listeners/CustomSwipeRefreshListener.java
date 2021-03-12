@@ -1,8 +1,11 @@
 package com.nateprat.university.mobileplatformdevelopment.core.listeners;
 
+import android.util.Log;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nateprat.university.mobileplatformdevelopment.core.concurrency.ThreadPools;
+import com.nateprat.university.mobileplatformdevelopment.utils.TagUtils;
 
 public abstract class CustomSwipeRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -14,6 +17,7 @@ public abstract class CustomSwipeRefreshListener implements SwipeRefreshLayout.O
 
     @Override
     public synchronized void onRefresh() {
+        Log.d(TagUtils.getTag(this), "onRefresh() called for CustomSwipeRefreshListener");
         swipeRefreshLayout.setRefreshing(true);
         ThreadPools.getInstance().submitTask(() -> {
             if (run()) {

@@ -5,6 +5,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -17,6 +18,7 @@ public final class ThreadPools {
 
     private static ThreadPools instance;
     private final ThreadPoolExecutor threadPoolExecutor;
+    private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 
     private static final int corePoolSize = 5;
     private static final int maxPoolSize = 10;
@@ -26,6 +28,7 @@ public final class ThreadPools {
 
     private ThreadPools() {
         threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit, blockingQueue);
+        scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(corePoolSize, threadPoolExecutor.getThreadFactory());
     }
 
     public static ThreadPools getInstance() {
@@ -46,6 +49,18 @@ public final class ThreadPools {
     public <T> T submitTask(Callable<T> callable, long timeout, TimeUnit timeUnit) throws InterruptedException, ExecutionException, TimeoutException {
         Future<T> future = threadPoolExecutor.submit(callable);
         return future.get(timeout, timeUnit);
+    }
+
+    public void scheduleWithFixedDelay(Runnable runnable, long initialDelay, long delay, TimeUnit timeUnit) {
+        scheduledThreadPoolExecutor.scheduleWithFixedDelay(runnable, initialDelay, delay, timeUnit);
+    }
+
+    public boolean removeTask(Runnable runnable) {
+        return threadPoolExecutor.remove(runnable);
+    }
+
+    public boolean removeScheduledTask(Runnable runnable) {
+        return scheduledThreadPoolExecutor.remove(runnable);
     }
 
 }

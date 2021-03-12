@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nateprat.mobileplatformdevelopment.R;
+import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
 import com.nateprat.university.mobileplatformdevelopment.ui.home.HomeFragment;
 import com.nateprat.university.mobileplatformdevelopment.ui.map.MapFragment;
 
@@ -22,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private Fragment homeFragment;
     private Fragment mapFragment;
 
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -31,11 +31,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        BGSEarthquakeFeed.getInstance().start();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        BGSEarthquakeFeed.getInstance().stop();
     }
 
     @Override
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BGSEarthquakeFeed.getInstance().start();
         fragmentContainerView = findViewById(R.id.fragmentContainerView);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
