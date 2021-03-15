@@ -1,5 +1,6 @@
 package com.nateprat.university.mobileplatformdevelopment.ui.map;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -20,10 +23,13 @@ import com.nateprat.mobileplatformdevelopment.R;
 import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 import com.nateprat.university.mobileplatformdevelopment.model.Location;
+import com.nateprat.university.mobileplatformdevelopment.service.RedGreenInterpolationService;
 import com.nateprat.university.mobileplatformdevelopment.ui.home.HomeFragment;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.nateprat.university.mobileplatformdevelopment.utils.MapUtils.getMarkerColourForMagnitude;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -105,7 +111,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             Location location = earthquakeRecord.getEarthquake().getLocation();
             String title = location.getLocationString();
             LatLng latLng = location.getLatLng();
-            MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(title).draggable(false);
+            MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(title).draggable(false).icon(getMarkerColourForMagnitude(earthquakeRecord.getEarthquake().getMagnitude()));
             markerRecordMap.put(markerOptions, earthquakeRecord);
         }
     }
@@ -115,4 +121,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         marker.getId();
         return true;
     }
+
 }

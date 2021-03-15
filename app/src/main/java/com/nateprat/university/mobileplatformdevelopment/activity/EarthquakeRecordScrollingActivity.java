@@ -26,6 +26,7 @@ import com.nateprat.mobileplatformdevelopment.R;
 import com.nateprat.university.mobileplatformdevelopment.model.Earthquake;
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 import com.nateprat.university.mobileplatformdevelopment.ui.custom.MagnitudeCircle;
+import com.nateprat.university.mobileplatformdevelopment.utils.MapUtils;
 import com.nateprat.university.mobileplatformdevelopment.utils.TagUtils;
 
 import java.util.Date;
@@ -146,7 +147,8 @@ public class EarthquakeRecordScrollingActivity extends AppCompatActivity {
 
 
             Marker placeMarker = googleMap.addMarker(new MarkerOptions().position(placeLocation)
-                    .title(getTitle().toString()));
+                    .title(getTitle().toString())
+                    .icon(MapUtils.getMarkerColourForMagnitude(getIntent().getDoubleExtra(KEY_MAGNITUDE, 0))));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(placeLocation, MAP_ZOOM_LEVEL), MAP_ANIMATION_LENGTH_MS, null);
         });
 
