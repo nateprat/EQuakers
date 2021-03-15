@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
 
 
         initUI();
-        // Got to sleep for 100ms for some reason for swipeListener to allow onRefresh()
+        // FIXME: 15/03/2021 | needs 100ms sleep to allow swipeListener.onRefresh() for some reason
         DateTimeUtils.sleep(100);
         swipeListener.onRefresh();
         return root;
