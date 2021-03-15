@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nateprat.mobileplatformdevelopment.R;
 import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
+import com.nateprat.university.mobileplatformdevelopment.ui.daterange.DateRangeFragment;
 import com.nateprat.university.mobileplatformdevelopment.ui.home.HomeFragment;
 import com.nateprat.university.mobileplatformdevelopment.ui.map.MapFragment;
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment homeFragment;
     private Fragment mapFragment;
+    private Fragment dateRangeFragment;
 
     @Override
     protected void onPostResume() {
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         fm = getSupportFragmentManager();
         homeFragment = new HomeFragment();
         mapFragment = new MapFragment();
+        dateRangeFragment = new DateRangeFragment();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -74,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.bottom_navigation_map:
                     switchToMap();
+                    return true;
+                case R.id.bottom_navigation_date_range:
+                    switchToDateRange();
                     return true;
             }
             return false;
@@ -86,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchToMap() {
         fm.beginTransaction().replace(R.id.fragmentContainerView, mapFragment).commit();
+    }
+
+    private void switchToDateRange() {
+        fm.beginTransaction().replace(R.id.fragmentContainerView, dateRangeFragment).commit();
     }
 
 

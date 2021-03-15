@@ -33,10 +33,11 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_earthquake_record_scrolling">ScrollingActivity</string>
     <string name="title_activity_earthquake_map_display">Map</string>
-    <string name="bottom_navigation_list">List</string>
+    <string name="bottom_navigation_home">Home</string>
     <string name="bottom_navigation_map">Map</string>
     <string name="fragment_home_sort">Sort</string>
     <string name="fragment_home_title">UK Earthquakes</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_navigation_range">Range</string>
 </resources>

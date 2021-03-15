@@ -5,11 +5,17 @@
         android:enabled="true"
 
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/bottom_navigation_list" />
+        android:title="@string/bottom_navigation_home" />
     <item
         android:id="@+id/bottom_navigation_map"
         android:enabled="true"
 
         android:icon="@android:drawable/ic_dialog_map"
         android:title="@string/bottom_navigation_map" />
+    <item
+        android:id="@+id/bottom_navigation_date_range"
+        android:enabled="true"
+
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/bottom_navigation_range" />
 </menu>

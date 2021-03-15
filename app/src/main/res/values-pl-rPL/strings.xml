@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">UKQuakes</string>
-    <string name="bottom_navigation_list" translatable="false">Lista</string>
+    <string name="bottom_navigation_home" translatable="false">Domu</string>
     <string name="bottom_navigation_map">Mapa</string>
     <string name="title_activity_earthquake_map_display">Mapa</string>
     <string name="fragment_home_sort">Sortować</string>
     <string name="fragment_home_title">Trzęsienia ziemi w Wielkiej Brytanii</string>
+    <string name="bottom_navigation_range">" Zasięg"</string>
 </resources>
