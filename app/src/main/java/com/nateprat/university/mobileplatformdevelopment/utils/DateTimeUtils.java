@@ -19,4 +19,12 @@ public class DateTimeUtils {
         return simpleDateFormat.parse(localDateTimeString);
     }
 
+    public static void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

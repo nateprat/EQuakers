@@ -13,11 +13,11 @@ public class EarthquakeObserver implements Observer {
 
     private List<EarthquakeRecord> records;
 
-    public List<EarthquakeRecord> getRecords() {
+    public synchronized List<EarthquakeRecord> getRecords() {
         return records;
     }
 
-    private void setRecords(List<EarthquakeRecord> records) {
+    private synchronized void setRecords(List<EarthquakeRecord> records) {
         this.records = records;
     }
 
@@ -27,7 +27,7 @@ public class EarthquakeObserver implements Observer {
         this.setRecords((List<EarthquakeRecord>) arg);
     }
 
-    public void requestUpdate() {
+    public synchronized void requestUpdate() {
         Log.i(TagUtils.getTag(this), "Requesting manual update for BGSEarthquakeFeed");
         BGSEarthquakeFeed.getInstance().callNow();
     }

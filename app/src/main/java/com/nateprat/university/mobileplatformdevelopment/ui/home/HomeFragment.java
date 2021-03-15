@@ -25,6 +25,7 @@ import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 import com.nateprat.university.mobileplatformdevelopment.model.holders.EarthquakeRecordAdapter;
 import com.nateprat.university.mobileplatformdevelopment.ui.SortItemListDialogFragment;
 import com.nateprat.university.mobileplatformdevelopment.ui.custom.sorting.EarthquakeRecordsSorting;
+import com.nateprat.university.mobileplatformdevelopment.utils.DateTimeUtils;
 import com.nateprat.university.mobileplatformdevelopment.utils.TagUtils;
 
 import java.util.List;
@@ -51,9 +52,13 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(earthquakeListAdapter);
         sortChip = root.findViewById(R.id.sortChip);
         BGSEarthquakeFeed.getInstance().addObserver(earthquakeObserver);
+        earthquakeObserver.requestUpdate();
 
 
         initUI();
+        // Got to sleep for 100ms for some reason for swipeListener to allow onRefresh()
+        DateTimeUtils.sleep(100);
+        swipeListener.onRefresh();
         return root;
     }
 
@@ -64,10 +69,6 @@ public class HomeFragment extends Fragment {
     private void initUI() {
         initialiseEarthquakeSwipeLayout();
         initialiseSortButton();
-    }
-
-    private List<EarthquakeRecord> retrieveRecords() {
-        return BritishGeologicalSurveyEarthquakeAPI.getInstance().call();
     }
 
     private void initialiseEarthquakeSwipeLayout() {
@@ -95,7 +96,6 @@ public class HomeFragment extends Fragment {
             }
         };
         swipeRefreshLayout.setOnRefreshListener(swipeListener);
-        swipeListener.onRefresh();
     }
 
     private void initialiseSortButton() {
