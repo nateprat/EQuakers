@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.chip.Chip;
 import com.nateprat.mobileplatformdevelopment.R;
 import com.nateprat.university.mobileplatformdevelopment.api.BritishGeologicalSurveyEarthquakeAPI;
+import com.nateprat.university.mobileplatformdevelopment.core.concurrency.ThreadPools;
 import com.nateprat.university.mobileplatformdevelopment.core.listeners.CustomSwipeRefreshListener;
 import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
 import com.nateprat.university.mobileplatformdevelopment.core.publish.EarthquakeObserver;
@@ -57,10 +58,21 @@ public class HomeFragment extends Fragment {
 
         initUI();
         // FIXME: 15/03/2021 | needs 100ms sleep to allow swipeListener.onRefresh() for some reason
-        DateTimeUtils.sleep(100);
+        DateTimeUtils.sleep(150);
         swipeListener.onRefresh();
         return root;
     }
+
+//    private void ensureListHasLoaded() {
+//        ThreadPools.getInstance().submitTask(() -> {
+//            while (earthquakeListAdapter.getCurrentList().isEmpty()) {
+//                swipeListener.onRefresh();
+//                if (earthquakeListAdapter.getCurrentList().isEmpty()) {
+//                    DateTimeUtils.sleep(50);
+//                }
+//            }
+//        });
+//    }
 
     public static SwipeRefreshLayout.OnRefreshListener getSwipeListener() {
         return swipeListener;
@@ -88,11 +100,12 @@ public class HomeFragment extends Fragment {
                     }
                     earthquakeListAdapter.submitList(earthquakeObserver.getRecords());
                 });
+                Toast.makeText(getContext(), "Updated earthquake list", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             protected void onFailure() {
-                Toast.makeText(getContext(), "Failed to update earthquake list", Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), "Failed to update earthquake list", Toast.LENGTH_SHORT).show();
             }
         };
         swipeRefreshLayout.setOnRefreshListener(swipeListener);

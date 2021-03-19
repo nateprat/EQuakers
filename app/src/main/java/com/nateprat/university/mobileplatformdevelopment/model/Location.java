@@ -31,6 +31,10 @@ public class Location implements Serializable {
         return latLng.asLatLng();
     }
 
+    public LatLngExt getLatLngExt() {
+        return latLng;
+    }
+
     public String getLocationString() {
         StringBuilder sb = new StringBuilder();
         sb.append(WordUtils.capitalizeFully(name));

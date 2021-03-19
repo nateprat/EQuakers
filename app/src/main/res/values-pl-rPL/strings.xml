@@ -7,4 +7,16 @@
     <string name="fragment_home_sort">Sortować</string>
     <string name="fragment_home_title">Trzęsienia ziemi w Wielkiej Brytanii</string>
     <string name="bottom_navigation_range">" Zasięg"</string>
+    <string name="date_range_northen">Północny</string>
+    <string name="date_range_eastern">Wschodni</string>
+    <string name="date_range_southern">Południowy</string>
+    <string name="date_range_western">Zachodni</string>
+    <string name="date_range_geographic_title">Geograficzny</string>
+    <string name="date_range_magnitude_title">Wielkość</string>
+    <string name="date_range_depth_title">Głębokość</string>
+    <string name="date_range_high_magnitude_title">Wysoki</string>
+    <string name="date_range_low_magnitude_title">Niska</string>
+    <string name="date_range_start">Początek</string>
+    <string name="date_range_end">Koniec</string>
+    <string name="date_range_no_earthquakes_available">Brak Dostępnych Trzęsień Ziemi</string>
 </resources>

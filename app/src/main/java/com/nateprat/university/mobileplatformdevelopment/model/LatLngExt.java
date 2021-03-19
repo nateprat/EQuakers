@@ -22,11 +22,11 @@ public class LatLngExt implements Serializable {
         this(latLng.latitude, latLng.longitude);
     }
 
-    public double latitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public double longitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
