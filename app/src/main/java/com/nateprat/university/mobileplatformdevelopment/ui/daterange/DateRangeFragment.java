@@ -23,6 +23,7 @@ import com.nateprat.university.mobileplatformdevelopment.model.comparators.Earth
 import com.nateprat.university.mobileplatformdevelopment.model.comparators.EarthquakeLatComparator;
 import com.nateprat.university.mobileplatformdevelopment.model.comparators.EarthquakeLngComparator;
 import com.nateprat.university.mobileplatformdevelopment.model.comparators.EarthquakeMagnitudeComparator;
+import com.nateprat.university.mobileplatformdevelopment.ui.daterange.section.DepthDateRangeSelection;
 import com.nateprat.university.mobileplatformdevelopment.ui.daterange.section.MagnitudeDateRangeSection;
 
 import org.apache.commons.lang3.Range;
@@ -46,37 +47,24 @@ public class DateRangeFragment extends Fragment {
     private MagnitudeDateRangeSection highestMagnitudeDateRangeSection;
     private MagnitudeDateRangeSection lowestMagnitudeDateRangeSection;
 
+    private DepthDateRangeSelection deepestDateRangeSelection;
+    private DepthDateRangeSelection shallowestDateRangeSelection;
+
     // Earthquake Records
     private EarthquakeRecord mostNorthernEarthquake;
     private EarthquakeRecord mostEasternEarthquake;
     private EarthquakeRecord mostSouthernEarthquake;
     private EarthquakeRecord mostWesternEarthquake;
 
-    private EarthquakeRecord lowestMagnitudeEarthquake;
-
-    private EarthquakeRecord shallowestEarthquake;
-    private EarthquakeRecord deepestEarthquake;
-
     private TextView northernTextView;
     private TextView easternTextView;
     private TextView southernTextView;
     private TextView westernTextView;
 
-    private TextView lowMagnitudeTextView;
-
-    private TextView deepTextView;
-    private TextView shallowTextView;
-
-    
     private CardView northernCardView;
     private CardView easternCardView;
     private CardView southernCardView;
     private CardView westernCardView;
-
-    private CardView lowMagnitudeCardView;
-
-    private CardView deepCardView;
-    private CardView shallowCardView;
 
     private EarthquakeObserver earthquakeObserver = new EarthquakeObserver();
 
@@ -90,27 +78,21 @@ public class DateRangeFragment extends Fragment {
         endDateChip.setmChipBefore(startDateChip);
 
         highestMagnitudeDateRangeSection = new MagnitudeDateRangeSection(getContext(), v.findViewById(R.id.highMagnitudeCardView), v.findViewById(R.id.highMagnitudeRecord), v.findViewById(R.id.highMagnitudeButton));
+        lowestMagnitudeDateRangeSection = new MagnitudeDateRangeSection(getContext(), v.findViewById(R.id.lowMagnitudeCardView), v.findViewById(R.id.lowestMagnitudeRecord), v.findViewById(R.id.lowMagnitudeButton));
+
+        deepestDateRangeSelection = new DepthDateRangeSelection(getContext(), v.findViewById(R.id.deepCardView), v.findViewById(R.id.deepestRecord), v.findViewById(R.id.deepestRecordValue));
+        shallowestDateRangeSelection = new DepthDateRangeSelection(getContext(), v.findViewById(R.id.shallowCardView), v.findViewById(R.id.shallowestRecord), v.findViewById(R.id.shallowestRecordValue));
 
         northernTextView = v.findViewById(R.id.northernRecord);
         easternTextView = v.findViewById(R.id.easternRecord);
         southernTextView = v.findViewById(R.id.southernRecord);
         westernTextView = v.findViewById(R.id.westernRecord);
 
-        lowMagnitudeTextView = v.findViewById(R.id.lowestMagnitudeRecord);
-
-        deepTextView = v.findViewById(R.id.deepestRecord);
-        shallowTextView = v.findViewById(R.id.shallowestRecordTitle);
-
 
         northernCardView = v.findViewById(R.id.northenCardView);
         easternCardView = v.findViewById(R.id.easternCardView);
         southernCardView = v.findViewById(R.id.southernCardView);
         westernCardView = v.findViewById(R.id.westernCardView);
-
-        lowMagnitudeCardView = v.findViewById(R.id.lowMagnitudeCardView);
-
-        deepCardView = v.findViewById(R.id.deepCardView);
-        shallowCardView = v.findViewById(R.id.shallowCardView);
 
         BGSEarthquakeFeed.getInstance().addObserver(earthquakeObserver);
         // Inflate the layout for this fragment
@@ -136,10 +118,6 @@ public class DateRangeFragment extends Fragment {
         southernCardView.setOnClickListener(openEarthquakeRecordActivity(mostSouthernEarthquake));
         westernCardView.setOnClickListener(openEarthquakeRecordActivity(mostWesternEarthquake));
 
-        lowMagnitudeCardView.setOnClickListener(openEarthquakeRecordActivity(lowestMagnitudeEarthquake));
-
-        deepCardView.setOnClickListener(openEarthquakeRecordActivity(deepestEarthquake));
-        shallowCardView.setOnClickListener(openEarthquakeRecordActivity(shallowestEarthquake));
     }
 
     private View.OnClickListener openEarthquakeRecordActivity(EarthquakeRecord record) {
@@ -172,17 +150,16 @@ public class DateRangeFragment extends Fragment {
                 highestMagnitudeDateRangeSection.setCurrentEarthquakeRecord(validRecords.parallelStream()
                         .max(new EarthquakeMagnitudeComparator())
                         .orElse(null));
-
-                lowestMagnitudeEarthquake = validRecords.parallelStream()
+                lowestMagnitudeDateRangeSection.setCurrentEarthquakeRecord(validRecords.parallelStream()
                         .min(new EarthquakeMagnitudeComparator())
-                        .orElse(null);
+                        .orElse(null));
 
-                deepestEarthquake = validRecords.parallelStream()
+                deepestDateRangeSelection.setCurrentEarthquakeRecord(validRecords.parallelStream()
                         .max(new EarthquakeDepthComparator())
-                        .orElse(null);
-                shallowestEarthquake = validRecords.parallelStream()
+                        .orElse(null));
+                shallowestDateRangeSelection.setCurrentEarthquakeRecord(validRecords.parallelStream()
                         .min(new EarthquakeDepthComparator())
-                        .orElse(null);
+                        .orElse(null));
                 updateRecordTextViews();
                 setUpListeners();
             }
@@ -196,10 +173,6 @@ public class DateRangeFragment extends Fragment {
         updateText(southernTextView, mostSouthernEarthquake);
         updateText(westernTextView, mostWesternEarthquake);
 
-        updateText(lowMagnitudeTextView, lowestMagnitudeEarthquake);
-
-        updateText(deepTextView, deepestEarthquake);
-        updateText(shallowTextView, shallowestEarthquake);
     }
 
     private void updateText(TextView textView, EarthquakeRecord earthquakeRecord) {
