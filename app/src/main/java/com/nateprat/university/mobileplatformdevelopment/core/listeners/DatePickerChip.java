@@ -35,6 +35,7 @@ public class DatePickerChip implements View.OnFocusChangeListener, View.OnClickL
     }
 
     public void setDate(Date date) {
+        this.mCalendar.setTime(date);
         this.mChip.setText(mFormat.format(date));
     }
 

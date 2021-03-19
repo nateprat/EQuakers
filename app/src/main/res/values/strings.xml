@@ -41,9 +41,11 @@
     <string name="date_range_geographic_title">Geographic</string>
     <string name="date_range_magnitude_title">Magnitude</string>
     <string name="date_range_depth_title">Depth</string>
-    <string name="date_range_high_magnitude_title">High</string>
-    <string name="date_range_low_magnitude_title">Low</string>
+    <string name="date_range_highest">Highest</string>
+    <string name="date_range_lowest">Lowest</string>
     <string name="date_range_start">Start</string>
     <string name="date_range_end">End</string>
     <string name="date_range_no_earthquakes_available">No Earthquakes Available</string>
+    <string name="date_range_deepest">Deepest</string>
+    <string name="date_range_shallowest">Shallowest</string>
 </resources>

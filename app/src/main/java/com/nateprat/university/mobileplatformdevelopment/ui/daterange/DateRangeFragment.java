@@ -1,7 +1,9 @@
 package com.nateprat.university.mobileplatformdevelopment.ui.daterange;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -10,25 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.chip.Chip;
 import com.nateprat.mobileplatformdevelopment.R;
 import com.nateprat.university.mobileplatformdevelopment.activity.EarthquakeRecordScrollingActivity;
 import com.nateprat.university.mobileplatformdevelopment.core.listeners.DatePickerChip;
 import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
 import com.nateprat.university.mobileplatformdevelopment.core.publish.EarthquakeObserver;
-import com.nateprat.university.mobileplatformdevelopment.model.Earthquake;
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
-import com.nateprat.university.mobileplatformdevelopment.model.LatLngExt;
-import com.nateprat.university.mobileplatformdevelopment.model.Location;
+import com.nateprat.university.mobileplatformdevelopment.model.comparators.EarthquakeDateComparator;
 import com.nateprat.university.mobileplatformdevelopment.model.comparators.EarthquakeDepthComparator;
 import com.nateprat.university.mobileplatformdevelopment.model.comparators.EarthquakeLatComparator;
 import com.nateprat.university.mobileplatformdevelopment.model.comparators.EarthquakeLngComparator;
 import com.nateprat.university.mobileplatformdevelopment.model.comparators.EarthquakeMagnitudeComparator;
+import com.nateprat.university.mobileplatformdevelopment.ui.daterange.section.MagnitudeDateRangeSection;
 
 import org.apache.commons.lang3.Range;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,13 +43,15 @@ public class DateRangeFragment extends Fragment {
     private DatePickerChip startDateChip;
     private DatePickerChip endDateChip;
 
+    private MagnitudeDateRangeSection highestMagnitudeDateRangeSection;
+    private MagnitudeDateRangeSection lowestMagnitudeDateRangeSection;
+
     // Earthquake Records
     private EarthquakeRecord mostNorthernEarthquake;
     private EarthquakeRecord mostEasternEarthquake;
     private EarthquakeRecord mostSouthernEarthquake;
     private EarthquakeRecord mostWesternEarthquake;
 
-    private EarthquakeRecord highestMagnitudeEarthquake;
     private EarthquakeRecord lowestMagnitudeEarthquake;
 
     private EarthquakeRecord shallowestEarthquake;
@@ -62,7 +62,6 @@ public class DateRangeFragment extends Fragment {
     private TextView southernTextView;
     private TextView westernTextView;
 
-    private TextView highMagnitudeTextView;
     private TextView lowMagnitudeTextView;
 
     private TextView deepTextView;
@@ -74,7 +73,6 @@ public class DateRangeFragment extends Fragment {
     private CardView southernCardView;
     private CardView westernCardView;
 
-    private CardView highMagnitudeCardView;
     private CardView lowMagnitudeCardView;
 
     private CardView deepCardView;
@@ -91,16 +89,17 @@ public class DateRangeFragment extends Fragment {
         startDateChip.setmChipAfter(endDateChip);
         endDateChip.setmChipBefore(startDateChip);
 
+        highestMagnitudeDateRangeSection = new MagnitudeDateRangeSection(getContext(), v.findViewById(R.id.highMagnitudeCardView), v.findViewById(R.id.highMagnitudeRecord), v.findViewById(R.id.highMagnitudeButton));
+
         northernTextView = v.findViewById(R.id.northernRecord);
         easternTextView = v.findViewById(R.id.easternRecord);
         southernTextView = v.findViewById(R.id.southernRecord);
         westernTextView = v.findViewById(R.id.westernRecord);
 
-        highMagnitudeTextView = v.findViewById(R.id.highMagnitudeRecord);
         lowMagnitudeTextView = v.findViewById(R.id.lowestMagnitudeRecord);
 
         deepTextView = v.findViewById(R.id.deepestRecord);
-        shallowTextView = v.findViewById(R.id.shallowestRecord);
+        shallowTextView = v.findViewById(R.id.shallowestRecordTitle);
 
 
         northernCardView = v.findViewById(R.id.northenCardView);
@@ -108,16 +107,27 @@ public class DateRangeFragment extends Fragment {
         southernCardView = v.findViewById(R.id.southernCardView);
         westernCardView = v.findViewById(R.id.westernCardView);
 
-        highMagnitudeCardView = v.findViewById(R.id.highMagnitudeCardView);
         lowMagnitudeCardView = v.findViewById(R.id.lowMagnitudeCardView);
 
         deepCardView = v.findViewById(R.id.deepCardView);
         shallowCardView = v.findViewById(R.id.shallowCardView);
 
         BGSEarthquakeFeed.getInstance().addObserver(earthquakeObserver);
-        onDateSetListener().run();
         // Inflate the layout for this fragment
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            setStartAndEndDate();
+        }
+        onDateSetListener().run();
         return v;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setStartAndEndDate() {
+        List<EarthquakeRecord> earthquakeRecords = BGSEarthquakeFeed.getInstance().getRecords();
+        Date minDate = earthquakeRecords.parallelStream().min(new EarthquakeDateComparator()).get().getEarthquake().getDate();
+        Date maxDate = earthquakeRecords.parallelStream().max(new EarthquakeDateComparator()).get().getEarthquake().getDate();
+        startDateChip.setDate(minDate);
+        endDateChip.setDate(maxDate);
     }
 
     private void setUpListeners() {
@@ -126,7 +136,6 @@ public class DateRangeFragment extends Fragment {
         southernCardView.setOnClickListener(openEarthquakeRecordActivity(mostSouthernEarthquake));
         westernCardView.setOnClickListener(openEarthquakeRecordActivity(mostWesternEarthquake));
 
-        highMagnitudeCardView.setOnClickListener(openEarthquakeRecordActivity(highestMagnitudeEarthquake));
         lowMagnitudeCardView.setOnClickListener(openEarthquakeRecordActivity(lowestMagnitudeEarthquake));
 
         deepCardView.setOnClickListener(openEarthquakeRecordActivity(deepestEarthquake));
@@ -160,9 +169,10 @@ public class DateRangeFragment extends Fragment {
                         .min(new EarthquakeLngComparator())
                         .orElse(null);
 
-                highestMagnitudeEarthquake = validRecords.parallelStream()
+                highestMagnitudeDateRangeSection.setCurrentEarthquakeRecord(validRecords.parallelStream()
                         .max(new EarthquakeMagnitudeComparator())
-                        .orElse(null);
+                        .orElse(null));
+
                 lowestMagnitudeEarthquake = validRecords.parallelStream()
                         .min(new EarthquakeMagnitudeComparator())
                         .orElse(null);
@@ -186,7 +196,6 @@ public class DateRangeFragment extends Fragment {
         updateText(southernTextView, mostSouthernEarthquake);
         updateText(westernTextView, mostWesternEarthquake);
 
-        updateText(highMagnitudeTextView, highestMagnitudeEarthquake);
         updateText(lowMagnitudeTextView, lowestMagnitudeEarthquake);
 
         updateText(deepTextView, deepestEarthquake);

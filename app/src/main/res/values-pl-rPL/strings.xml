@@ -14,9 +14,11 @@
     <string name="date_range_geographic_title">Geograficzny</string>
     <string name="date_range_magnitude_title">Wielkość</string>
     <string name="date_range_depth_title">Głębokość</string>
-    <string name="date_range_high_magnitude_title">Wysoki</string>
-    <string name="date_range_low_magnitude_title">Niska</string>
+    <string name="date_range_highest">Najwyższa</string>
+    <string name="date_range_lowest">Najniższa</string>
     <string name="date_range_start">Początek</string>
     <string name="date_range_end">Koniec</string>
     <string name="date_range_no_earthquakes_available">Brak Dostępnych Trzęsień Ziemi</string>
+    <string name="date_range_deepest">Najgłębszy</string>
+    <string name="date_range_shallowest">Płytkie</string>
 </resources>

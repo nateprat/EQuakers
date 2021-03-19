@@ -29,6 +29,8 @@ import com.nateprat.university.mobileplatformdevelopment.ui.home.HomeFragment;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.nateprat.university.mobileplatformdevelopment.utils.MapUtils.DEFAULT_MAP_LAT_LNG;
+import static com.nateprat.university.mobileplatformdevelopment.utils.MapUtils.DEFAULT_MAP_ZOOM;
 import static com.nateprat.university.mobileplatformdevelopment.utils.MapUtils.getMarkerColourForMagnitude;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -39,8 +41,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private final Map<MarkerOptions, EarthquakeRecord> markerRecordMap = new ConcurrentHashMap<>();
 
     // Defaults
-    private static final LatLng DEFAULT_MAP_LAT_LNG = new LatLng(54.418929, -4.196777);
-    private static final float DEFAULT_MAP_ZOOM = 5F;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
