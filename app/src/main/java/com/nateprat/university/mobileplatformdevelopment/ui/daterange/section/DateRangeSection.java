@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView;
 
 import com.nateprat.mobileplatformdevelopment.R;
 import com.nateprat.university.mobileplatformdevelopment.activity.EarthquakeRecordScrollingActivity;
+import com.nateprat.university.mobileplatformdevelopment.core.concurrency.ThreadPools;
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 
 public abstract class DateRangeSection {
@@ -25,12 +26,14 @@ public abstract class DateRangeSection {
 
     public void setCurrentEarthquakeRecord(EarthquakeRecord currentEarthquakeRecord) {
         this.currentEarthquakeRecord = currentEarthquakeRecord;
-        if (currentEarthquakeRecord != null) {
-            this.cardView.setOnClickListener(openEarthquakeRecordActivity(currentEarthquakeRecord));
-        } else {
-            this.cardView.setOnClickListener(null);
-        }
-        updateTextViews(nameTextView, currentEarthquakeRecord);
+        ThreadPools.getInstance().submitTask(() -> {
+            if (currentEarthquakeRecord != null) {
+                this.cardView.setOnClickListener(openEarthquakeRecordActivity(currentEarthquakeRecord));
+            } else {
+                this.cardView.setOnClickListener(null);
+            }
+            updateTextViews(nameTextView, currentEarthquakeRecord);
+        });
     }
 
     private View.OnClickListener openEarthquakeRecordActivity(EarthquakeRecord record) {

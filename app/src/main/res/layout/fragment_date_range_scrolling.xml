@@ -36,7 +36,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/northenCardView"
+                    android:id="@+id/northernCardView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -48,7 +48,7 @@
                     android:focusableInTouchMode="true"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="5dp"
-                    app:layout_constraintBottom_toTopOf="@+id/boxHGuidelineGeo"
+                    app:layout_constraintBottom_toTopOf="@+id/southernCardView"
                     app:layout_constraintEnd_toStartOf="@+id/boxVGuidelineGeo"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/geographicTitle">
@@ -86,7 +86,7 @@
                         <com.google.android.gms.maps.MapView
                             android:id="@+id/northernMapView"
                             android:layout_width="0dp"
-                            android:layout_height="100dp"
+                            android:layout_height="200dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
@@ -107,13 +107,12 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="5dp"
-                    app:layout_constraintBottom_toTopOf="@+id/boxHGuidelineGeo"
+                    app:layout_constraintBottom_toTopOf="@+id/westernCardView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/boxVGuidelineGeo"
                     app:layout_constraintTop_toBottomOf="@+id/geographicTitle">
@@ -125,7 +124,7 @@
                         <com.google.android.gms.maps.MapView
                             android:id="@+id/easternMapView"
                             android:layout_width="0dp"
-                            android:layout_height="100dp"
+                            android:layout_height="200dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
@@ -169,7 +168,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:clickable="true"
@@ -179,8 +177,7 @@
                     app:cardElevation="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/boxVGuidelineGeo"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/boxHGuidelineGeo">
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -189,7 +186,7 @@
                         <com.google.android.gms.maps.MapView
                             android:id="@+id/southernMapView"
                             android:layout_width="0dp"
-                            android:layout_height="100dp"
+                            android:layout_height="200dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
@@ -233,7 +230,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:clickable="true"
@@ -243,8 +239,7 @@
                     app:cardElevation="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/boxVGuidelineGeo"
-                    app:layout_constraintTop_toTopOf="@+id/boxHGuidelineGeo">
+                    app:layout_constraintStart_toStartOf="@+id/boxVGuidelineGeo">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -253,7 +248,7 @@
                         <com.google.android.gms.maps.MapView
                             android:id="@+id/westernMapView"
                             android:layout_width="0dp"
-                            android:layout_height="100dp"
+                            android:layout_height="200dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
@@ -297,14 +292,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_begin="200dp" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/boxHGuidelineGeo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="217dp" />
+                    app:layout_constraintGuide_begin="197dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

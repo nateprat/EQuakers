@@ -48,4 +48,5 @@
     <string name="date_range_no_earthquakes_available">No Earthquakes Available</string>
     <string name="date_range_deepest">Deepest</string>
     <string name="date_range_shallowest">Shallowest</string>
+    <string name="date_range_title">Date Range</string>
 </resources>

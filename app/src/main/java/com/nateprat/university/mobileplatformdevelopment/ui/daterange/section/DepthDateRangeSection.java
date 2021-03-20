@@ -9,11 +9,11 @@ import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 
 import java.util.Locale;
 
-public class DepthDateRangeSelection extends DateRangeSection {
+public class DepthDateRangeSection extends DateRangeSection {
 
     private TextView depthTextView;
 
-    public DepthDateRangeSelection(Context context, CardView cardView, TextView nameTextView, TextView depthTextView) {
+    public DepthDateRangeSection(Context context, CardView cardView, TextView nameTextView, TextView depthTextView) {
         super(context, cardView, nameTextView);
         this.depthTextView = depthTextView;
     }
