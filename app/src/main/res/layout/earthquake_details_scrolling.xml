@@ -103,17 +103,16 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/magnitudeValue"
+                    android:id="@+id/magnitudeButtonDetailsScrolling"
                     android:layout_width="@dimen/magnitude_circle"
                     android:layout_height="@dimen/magnitude_circle"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@drawable/round_circle"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:text="1.0"
-                    app:backgroundTint="@null"
+                    app:cornerRadius="50dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -127,7 +126,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="@string/activity_earthquake_magnitude"
-                    app:layout_constraintBottom_toTopOf="@+id/magnitudeValue"
+                    app:layout_constraintBottom_toTopOf="@+id/magnitudeButtonDetailsScrolling"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -80,7 +80,7 @@ public class EarthquakeRecordScrollingActivity extends AppCompatActivity {
         latValue = findViewById(R.id.latValue);
         longValue = findViewById(R.id.longValue);
         this.urlButton.setOnClickListener(urlButtonOnClick());
-        magnitudeValue = new MagnitudeCircle(getApplicationContext(), findViewById(R.id.magnitudeValue));
+        magnitudeValue = new MagnitudeCircle(getApplicationContext(), findViewById(R.id.magnitudeButtonDetailsScrolling));
 
 
         setText();

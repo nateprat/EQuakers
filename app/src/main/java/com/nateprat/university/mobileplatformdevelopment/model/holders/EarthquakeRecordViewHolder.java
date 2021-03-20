@@ -23,7 +23,7 @@ public class EarthquakeRecordViewHolder extends RecyclerView.ViewHolder implemen
         super(view);
         location = view.findViewById(R.id.locationValue);
         date = view.findViewById(R.id.dateValue);
-        magnitudeCircle = new MagnitudeCircle(view.findViewById(R.id.magnitudeValue));
+        magnitudeCircle = new MagnitudeCircle(view.findViewById(R.id.magnitudeButtonEarthquakeDetails));
     }
 
     @Override

@@ -39,7 +39,6 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="@string/date_range_title"
-                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/chipGroup"
@@ -66,6 +65,8 @@
                         android:background="?attr/colorPrimary"
                         android:checkable="false"
                         android:text="@string/date_range_start"
+                        android:textColor="?android:attr/textColorPrimary"
+                        app:chipBackgroundColor="?attr/colorPrimary"
                         app:chipIcon="@android:drawable/ic_menu_my_calendar"
                         app:chipIconVisible="false" />
 
@@ -75,6 +76,8 @@
                         android:layout_height="wrap_content"
                         android:background="?attr/colorPrimary"
                         android:text="@string/date_range_end"
+                        android:textColor="?android:attr/textColorPrimary"
+                        app:chipBackgroundColor="?attr/colorPrimary"
                         app:chipIcon="@android:drawable/ic_menu_my_calendar"
                         app:chipIconVisible="false" />
                 </com.google.android.material.chip.ChipGroup>

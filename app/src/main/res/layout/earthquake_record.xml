@@ -13,7 +13,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:cardBackgroundColor="?attr/colorOnPrimary"
+        app:cardBackgroundColor="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,22 +22,24 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/layout_bg">
+            android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/magnitudeValue"
+                android:id="@+id/magnitudeButtonEarthquakeDetails"
                 android:layout_width="@dimen/magnitude_circle"
                 android:layout_height="@dimen/magnitude_circle"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/round_circle"
-                android:backgroundTintMode="multiply"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:text="1.0"
+                app:cornerRadius="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="?attr/colorOnPrimary"
+                app:strokeWidth="3dp" />
 
             <TextView
                 android:id="@+id/dateValue"
@@ -52,12 +55,16 @@
                 android:id="@+id/locationValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="TextView"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/magnitudeValue"
+                app:layout_constraintEnd_toStartOf="@+id/dateValue"
+                app:layout_constraintStart_toEndOf="@+id/magnitudeButtonEarthquakeDetails"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
