@@ -1,12 +1,15 @@
 package com.nateprat.university.mobileplatformdevelopment.ui.custom.sorting;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 
 import java.util.Comparator;
+
+import static android.content.ContentValues.TAG;
 
 public abstract class EarthquakeRecordSorter {
 
@@ -52,27 +55,15 @@ public abstract class EarthquakeRecordSorter {
         this.ascending = ascending;
     }
 
-    public void switchOrder() {
-        if (ascending) {
-            this.ascending = false;
-        } else {
-            this.ascending = true;
-        }
-    }
-
     public Comparator<EarthquakeRecord> getComparator() {
         return comparator;
     }
     
     @RequiresApi(api = Build.VERSION_CODES.N)
     public Comparator<EarthquakeRecord> getWorkingComparator() {
+        Log.d(TAG, "getWorkingComparator: " + "calling working comparator for " + comparator.getClass().getSimpleName());
         if (isEnabled()) {
-            if (isAscending()) {
-                return comparator;
-            } else {
-                return comparator.reversed();
-            }
-        }
-        return null;
+            return isAscending() ? comparator : comparator.reversed();
+        } else return null;
     }
 }

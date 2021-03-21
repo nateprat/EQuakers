@@ -93,14 +93,17 @@ public class HomeFragment extends Fragment {
 
             @Override
             protected void onSuccess() {
-                Log.i(TagUtils.getTag(this), "Mapping earthquake list (size=" + earthquakeObserver.getRecords().size() + ") to scroller view.");
+                List<EarthquakeRecord> records = earthquakeObserver.getRecords();
+                Log.i(TagUtils.getTag(this), "Mapping earthquake list (size=" + records.size() + ") to scroller view.");
                 getActivity().runOnUiThread(() -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        EarthquakeRecordsSorting.getWorkingComparator().ifPresent(earthquakeObserver.getRecords()::sort);
+                        EarthquakeRecordsSorting.getWorkingComparator().ifPresent(records::sort);
                     }
-                    earthquakeListAdapter.submitList(earthquakeObserver.getRecords());
+                    if (earthquakeListAdapter.getCurrentList().size() != records.size()) {
+                        Toast.makeText(getContext(), "Updated earthquake list", Toast.LENGTH_SHORT).show();
+                    }
+                    earthquakeListAdapter.submitList(records);
                 });
-                Toast.makeText(getContext(), "Updated earthquake list", Toast.LENGTH_SHORT).show();
             }
 
             @Override
