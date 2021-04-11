@@ -64,7 +64,7 @@ public class SortItemListDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        HomeFragment.getSwipeListener().onRefresh();
+        HomeFragment.getEarthquakeListService().refresh();
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {

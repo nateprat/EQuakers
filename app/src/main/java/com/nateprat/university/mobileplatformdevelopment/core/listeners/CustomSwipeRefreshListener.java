@@ -13,6 +13,7 @@ public abstract class CustomSwipeRefreshListener implements SwipeRefreshLayout.O
 
     protected CustomSwipeRefreshListener(SwipeRefreshLayout swipeRefreshLayout) {
         this.swipeRefreshLayout = swipeRefreshLayout;
+        this.swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override

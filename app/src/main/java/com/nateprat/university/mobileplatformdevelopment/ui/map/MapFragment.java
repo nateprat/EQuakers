@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,6 +38,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private MapView mapView;
     private GoogleMap gMap;
+    private RecyclerView recyclerView;
 
     private final Map<MarkerOptions, EarthquakeRecord> markerRecordMap = new ConcurrentHashMap<>();
 
@@ -52,6 +54,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(this);
+
+        try {
+            recyclerView = v.findViewById(R.id.earthquakeMapList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return v;
     }
