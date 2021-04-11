@@ -17,13 +17,14 @@ public class BGSEarthquakeFeed extends Observable implements Service {
 
     private static BGSEarthquakeFeed instance;
     private static final Object syncLock = new Object();
-
+    private static boolean isStarted = false;
+    private long delay = 1;
+    private TimeUnit unit = TimeUnit.MINUTES;
     private List<EarthquakeRecord> records = new ArrayList<>();
     private final Runnable runnable = () -> {
         Log.i(BGSEarthquakeFeed.class.getSimpleName(), "Updating earthquake records from BritishGeologicalSurveyEarthquakeAPI");
         setRecords(BritishGeologicalSurveyEarthquakeAPI.getInstance().call());
     };
-    private static boolean isStarted = false;
 
     public BGSEarthquakeFeed() { }
 
@@ -40,6 +41,27 @@ public class BGSEarthquakeFeed extends Observable implements Service {
 
     public List<EarthquakeRecord> getRecords() {
         return records;
+    }
+
+    public void updateRefreshTime(long delay, TimeUnit unit) {
+        updateRefreshTime(delay, unit, true);
+    }
+
+    public void updateRefreshTime(long delay, TimeUnit unit, boolean restart) {
+        Log.d(TagUtils.getTag(this), "Updating refresh time for BGSEarthquakeFeed. Old: " + formatRefreshTime(this.delay, this.unit) + ", New: " + formatRefreshTime(delay, unit));
+        this.delay = delay;
+        this.unit = unit;
+        if (restart) {
+            Log.d(TagUtils.getTag(this), "Restarting BGSEarthquakeService...");
+            if (isStarted) {
+                stop();
+            }
+            start();
+        }
+    }
+
+    private String formatRefreshTime(long delay, TimeUnit unit) {
+        return "delay: " + delay + "; unit: " + unit.toString();
     }
 
     @Override
@@ -69,7 +91,7 @@ public class BGSEarthquakeFeed extends Observable implements Service {
     public void start() {
         if (!isStarted) {
             Log.d(TagUtils.getTag(this), "Submitting BGSEarthquakeFeed runnable to ScheduledThreadPoolExecutor");
-            ThreadPools.getInstance().scheduleWithFixedDelay(runnable, 0, 1, TimeUnit.MINUTES);
+            ThreadPools.getInstance().scheduleWithFixedDelay(runnable, 0, delay, unit);
             isStarted = true;
         } else {
             Log.w(TagUtils.getTag(this), "BGSEarthquakeFeed is already started.");
