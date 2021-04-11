@@ -1,13 +1,11 @@
 package com.nateprat.university.mobileplatformdevelopment.ui.home;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,24 +15,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.chip.Chip;
 import com.nateprat.mobileplatformdevelopment.R;
-import com.nateprat.university.mobileplatformdevelopment.core.listeners.CustomSwipeRefreshListener;
-import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthquakeFeed;
-import com.nateprat.university.mobileplatformdevelopment.core.publish.EarthquakeObserver;
-import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 import com.nateprat.university.mobileplatformdevelopment.model.holders.EarthquakeRecordAdapter;
 import com.nateprat.university.mobileplatformdevelopment.service.EarthquakeListService;
 import com.nateprat.university.mobileplatformdevelopment.ui.SortItemListDialogFragment;
-import com.nateprat.university.mobileplatformdevelopment.ui.custom.sorting.EarthquakeRecordsSorting;
 import com.nateprat.university.mobileplatformdevelopment.utils.DateTimeUtils;
 import com.nateprat.university.mobileplatformdevelopment.utils.TagUtils;
-
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private Context context;
-    private RecyclerView recyclerView;
     private Chip sortChip;
+    private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EarthquakeRecordAdapter earthquakeListAdapter;
     private static EarthquakeListService earthquakeListService;
@@ -43,7 +34,7 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         context = container.getContext();
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        swipeRefreshLayout = root.findViewById(R.id.swipe_layout);
+        swipeRefreshLayout = root.findViewById(R.id.swipe_layout_map);
         recyclerView = root.findViewById(R.id.mainActivityEarthquakeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         earthquakeListAdapter = new EarthquakeRecordAdapter(context);
