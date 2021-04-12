@@ -24,7 +24,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static com.nateprat.university.mobileplatformdevelopment.utils.MapUtils.DEFAULT_MAP_LAT_LNG;
 import static com.nateprat.university.mobileplatformdevelopment.utils.MapUtils.DEFAULT_MAP_ZOOM;
-import static com.nateprat.university.mobileplatformdevelopment.utils.MapUtils.getMarkerColourForMagnitude;
 
 public class MapDateRangeSection extends DateRangeSection implements OnMapReadyCallback {
 
@@ -51,23 +50,32 @@ public class MapDateRangeSection extends DateRangeSection implements OnMapReadyC
         }
 //        ThreadPools.getInstance().submitTask(() -> {
         try {
+            LatLng focusedLatLng = null;
             for (EarthquakeRecord earthquakeRecord : observer.getRecords()) {
                 Location location = earthquakeRecord.getEarthquake().getLocation();
                 final String title = location.getLocationString();
                 final LatLng latLng = location.getLatLng();
-                BitmapDescriptor iconColour;
-                if (earthquakeRecord.equals(currentEarthquakeRecord)) {
-                    iconColour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
-                } else {
-                    iconColour = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-                }
-                activity.runOnUiThread(() -> gMap.addMarker(new MarkerOptions()
+                MarkerOptions markerOptions = new MarkerOptions()
                         .position(latLng)
                         .title(title)
-                        .draggable(false)
-                        .icon(iconColour)));
+                        .draggable(false);
+                if (earthquakeRecord.equals(currentEarthquakeRecord)) {
+                    focusedLatLng = earthquakeRecord.getEarthquake().getLocation().getLatLng();
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+                    markerOptions.zIndex(Float.MAX_VALUE);
+                } else {
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                }
+                LatLng finalFocusedLatLng = focusedLatLng;
+                activity.runOnUiThread(() -> {
+                    if (markerOptions.getIcon() != null) {
+                        gMap.addMarker(markerOptions);
+                    }
+                    if (finalFocusedLatLng != null) {
+                        gMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder().target(finalFocusedLatLng).zoom(DEFAULT_MAP_ZOOM).build()));
+                    }
+                });
             }
-            gMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.builder().target(DEFAULT_MAP_LAT_LNG).zoom(DEFAULT_MAP_ZOOM).build()));
         } catch (Exception e) {
             e.printStackTrace();
         }
