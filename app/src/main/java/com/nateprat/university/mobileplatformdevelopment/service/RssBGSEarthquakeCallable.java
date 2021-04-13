@@ -3,7 +3,6 @@ package com.nateprat.university.mobileplatformdevelopment.service;
 import android.util.Log;
 
 import com.nateprat.university.mobileplatformdevelopment.api.APIUrl;
-import com.nateprat.university.mobileplatformdevelopment.core.rss.RssParser;
 import com.nateprat.university.mobileplatformdevelopment.core.rss.RssParserImpl;
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 import com.nateprat.university.mobileplatformdevelopment.model.mapper.ElementEarthQuakeMapper;
@@ -21,7 +20,7 @@ public class RssBGSEarthquakeCallable implements Callable<List<EarthquakeRecord>
 
     private static final Mapper<Element, EarthquakeRecord> mapper = new ElementEarthQuakeMapper();
 
-    private final RssParser<EarthquakeRecord> rssParser;
+    private final RssParserImpl<EarthquakeRecord> rssParser;
 
     public RssBGSEarthquakeCallable() {
         URL url = null;
@@ -35,7 +34,7 @@ public class RssBGSEarthquakeCallable implements Callable<List<EarthquakeRecord>
 
     @Override
     public List<EarthquakeRecord> call() {
-        return rssParser.parse();
+        return rssParser.parseWeirdMethod();
     }
 
 }

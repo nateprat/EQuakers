@@ -26,18 +26,18 @@ public class ElementEarthQuakeMapper implements Mapper<Element, EarthquakeRecord
 
     private static final String deliminator = " ; ";
 
-    private static final String DESCRIPTION = "description";
-    private static final String LINK = "link";
-    private static final String PUB_DATE = "pubDate";
-    private static final String CATEGORY = "category";
-    private static final String GEO_LAT = "geo:lat";
-    private static final String GEO_LONG = "geo:long";
+    public static final String DESCRIPTION = "description";
+    public static final String LINK = "link";
+    public static final String PUB_DATE = "pubDate";
+    public static final String CATEGORY = "category";
+    public static final String GEO_LAT = "geo:lat";
+    public static final String GEO_LONG = "geo:long";
 
-    private static final String dDateTag = "Origin date/time";
-    private static final String dLocationTag = "Location";
-    private static final String dGeoTag = "Lat/long";
-    private static final String dDepthTag = "Depth";
-    private static final String dMagnitudeTag = "Magnitude";
+    public static final String dDateTag = "Origin date/time";
+    public static final String dLocationTag = "Location";
+    public static final String dGeoTag = "Lat/long";
+    public static final String dDepthTag = "Depth";
+    public static final String dMagnitudeTag = "Magnitude";
 
     @Override
     public EarthquakeRecord map(Element obj) {
