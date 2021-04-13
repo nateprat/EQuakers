@@ -18,7 +18,7 @@ public class BGSEarthquakeFeed extends Observable implements Service {
     private static BGSEarthquakeFeed instance;
     private static final Object syncLock = new Object();
     private static boolean isStarted = false;
-    private long delay = 15;
+    private long delay = 1;
     private TimeUnit unit = TimeUnit.MINUTES;
     private List<EarthquakeRecord> records = new ArrayList<>();
     private final Runnable runnable = () -> {
