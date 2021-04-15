@@ -91,5 +91,7 @@ public class MapDateRangeSection extends DateRangeSection implements OnMapReadyC
         gMap = googleMap;
         MapUtils.moveMapToDefault(gMap);
         gMapLock.unlock();
+        // FIXME: 15/04/2021 bug with fragments
+//        setCurrentEarthquakeRecord(getCurrentEarthquakeRecord());
     }
 }

@@ -1,5 +1,9 @@
 package com.nateprat.university.mobileplatformdevelopment.core.concurrency;
 
+import android.util.Log;
+
+import com.nateprat.university.mobileplatformdevelopment.utils.TagUtils;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -27,6 +31,7 @@ public final class ThreadPools {
     private static final BlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<>();
 
     private ThreadPools() {
+        Log.d(TagUtils.getTag(this), "Creating thread pool resource.");
         threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, timeUnit, blockingQueue);
         scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(corePoolSize, threadPoolExecutor.getThreadFactory());
     }

@@ -1,6 +1,7 @@
 package com.nateprat.university.mobileplatformdevelopment.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import com.nateprat.university.mobileplatformdevelopment.core.publish.BGSEarthqu
 import com.nateprat.university.mobileplatformdevelopment.ui.daterange.DateRangeFragment;
 import com.nateprat.university.mobileplatformdevelopment.ui.home.HomeFragment;
 import com.nateprat.university.mobileplatformdevelopment.ui.map.MapFragment;
+import com.nateprat.university.mobileplatformdevelopment.utils.TagUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,14 +89,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchToHome() {
+        Log.i(TagUtils.getTag(this), "Switching to home fragment in MainActivity");
         fm.beginTransaction().replace(R.id.fragmentContainerView, homeFragment).commit();
     }
 
     private void switchToMap() {
+        Log.i(TagUtils.getTag(this), "Switching to map fragment in MainActivity");
         fm.beginTransaction().replace(R.id.fragmentContainerView, mapFragment).commit();
     }
 
     private void switchToDateRange() {
+        Log.i(TagUtils.getTag(this), "Switching to date_range fragment in MainActivity");
         fm.beginTransaction().replace(R.id.fragmentContainerView, dateRangeFragment).commit();
     }
 
