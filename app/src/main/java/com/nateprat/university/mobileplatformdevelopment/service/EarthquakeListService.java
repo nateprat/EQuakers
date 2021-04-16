@@ -33,7 +33,9 @@ public class EarthquakeListService {
     }
 
     public void refresh() {
-        onRefreshListener.onRefresh();
+        if (onRefreshListener != null) {
+            onRefreshListener.onRefresh();
+        }
     }
 
     public void init() {
@@ -74,6 +76,7 @@ public class EarthquakeListService {
 
     public void uninit() {
         BGSEarthquakeFeed.getInstance().deleteObserver(earthquakeObserver);
+        swipeRefreshLayout.setOnRefreshListener(null);
     }
 
 }

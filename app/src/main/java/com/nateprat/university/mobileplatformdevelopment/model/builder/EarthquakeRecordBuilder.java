@@ -1,9 +1,12 @@
 package com.nateprat.university.mobileplatformdevelopment.model.builder;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.nateprat.university.mobileplatformdevelopment.model.Earthquake;
 import com.nateprat.university.mobileplatformdevelopment.model.EarthquakeRecord;
 import com.nateprat.university.mobileplatformdevelopment.model.Location;
+import com.nateprat.university.mobileplatformdevelopment.utils.TagUtils;
 
 import org.apache.commons.lang3.builder.Builder;
 
@@ -69,10 +72,30 @@ public class EarthquakeRecordBuilder implements Builder<EarthquakeRecord> {
     }
 
     @Override
+    public String toString() {
+        return "EarthquakeRecordBuilder{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", locationName='" + locationName + '\'' +
+                ", locationCounty='" + locationCounty + '\'' +
+                ", depth=" + depth +
+                ", magnitude=" + magnitude +
+                ", date=" + date +
+                ", category='" + category + '\'' +
+                ", url=" + url +
+                '}';
+    }
+
+    @Override
     public EarthquakeRecord build() {
-        LatLng latLngObj = new LatLng(latitude, longitude);
-        Location locationObj = new Location(locationName, locationCounty, latLngObj);
-        Earthquake earthquakeObj = new Earthquake(date, locationObj, depth, magnitude);
-        return new EarthquakeRecord(category, url, earthquakeObj);
+        if (locationName != null && locationCounty != null && date != null && category != null && url != null) {
+            LatLng latLngObj = new LatLng(latitude, longitude);
+            Location locationObj = new Location(locationName, locationCounty, latLngObj);
+            Earthquake earthquakeObj = new Earthquake(date, locationObj, depth, magnitude);
+            return new EarthquakeRecord(category, url, earthquakeObj);
+        } else {
+            Log.e(TagUtils.getTag(this), "Failed to create EarthquakeRecord, see details: " + this.toString());
+            return null;
+        }
     }
 }
