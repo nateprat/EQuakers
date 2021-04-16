@@ -88,7 +88,7 @@ public class EarthquakeRecordBuilder implements Builder<EarthquakeRecord> {
 
     @Override
     public EarthquakeRecord build() {
-        if (locationName != null && locationCounty != null && date != null && category != null && url != null) {
+        if (locationName != null && date != null && category != null && url != null) {
             LatLng latLngObj = new LatLng(latitude, longitude);
             Location locationObj = new Location(locationName, locationCounty, latLngObj);
             Earthquake earthquakeObj = new Earthquake(date, locationObj, depth, magnitude);
