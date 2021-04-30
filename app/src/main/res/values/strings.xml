@@ -12,7 +12,6 @@
     <string name="activity_earthquake_magnitude">Magnitude</string>
     <string name="title_activity_bottom_navigation">MainActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
-    <string name="google_maps_api_key" translatable="false">AIzaSyBG4Sb6F8YSDiI37QxPEnsHUDmjP3M8yjM</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
